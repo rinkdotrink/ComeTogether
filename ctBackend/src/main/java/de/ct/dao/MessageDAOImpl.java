@@ -3,7 +3,7 @@ package de.ct.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.ct.datamodel.Message;
+import de.ct.shared.Message;
 
 public class MessageDAOImpl implements MessageDAO {
 

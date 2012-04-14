@@ -5,14 +5,14 @@ import java.util.List;
 import com.google.inject.Inject;
 
 import de.ct.dao.MessageDAO;
-import de.ct.datamodel.Message;
+import de.ct.shared.Message;
 
 public class MessageServiceImpl implements MessageService {
 
 	MessageDAO messageDAO;
 
 	@Inject
-	public MessageServiceImpl(MessageDAO aMessageDAO) {
+	public MessageServiceImpl(final MessageDAO aMessageDAO) {
 		this.messageDAO = aMessageDAO;
 	}
 
@@ -22,15 +22,15 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void deleteMessage(long messageId) {
+	public void deleteMessage(final long aMessageId) {
 		Message message;
-		message = messageDAO.read(messageId);
+		message = messageDAO.read(aMessageId);
 		messageDAO.delete(message);
 	}
 
 	@Override
-	public Message findMessageById(long messageId) {
-		return messageDAO.read(messageId);
+	public Message findMessageById(final long aMessageId) {
+		return messageDAO.read(aMessageId);
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public Message saveMessage(Message message) {
-		return messageDAO.update(message);
+	public Message saveMessage(final Message aMessage) {
+		return messageDAO.update(aMessage);
 	}
 
 }

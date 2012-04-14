@@ -2,17 +2,17 @@ package de.ct.service;
 
 import java.util.List;
 
-import de.ct.datamodel.Message;
+import de.ct.shared.Message;
 
 public interface MessageService {
 
 	public Message createNewMessage();
 
-	public void deleteMessage(long messageId);
+	public void deleteMessage(final long aMessageId);
 
-	public Message findMessageById(long messageId);
+	public Message findMessageById(final long aMessageId);
 
 	public List<Message> getMessages();
 
-	public Message saveMessage(Message message);
+	public Message saveMessage(final Message aMessage);
 }

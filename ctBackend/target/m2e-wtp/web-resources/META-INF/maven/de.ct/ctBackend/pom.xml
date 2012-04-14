@@ -10,6 +10,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>de.ct.shared</groupId>
+			<artifactId>ctShared</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.inject.extensions</groupId>
 			<artifactId>guice-servlet</artifactId>
 			<version>3.0</version>

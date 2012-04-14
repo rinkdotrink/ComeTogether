@@ -13,6 +13,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import de.ct.Module;
+import de.ct.shared.Message;
 
 public class MessageTest {
 	Message m;
