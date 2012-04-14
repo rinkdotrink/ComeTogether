@@ -11,7 +11,7 @@
     </coordinates>
     <panel_attributes>User
 --
--id : String
+-id : long
 -name : String
 -email : String
 -gender : Enum
@@ -32,7 +32,7 @@
     </coordinates>
     <panel_attributes>Event
 --
--eventId : String
+-eventId : long
 -date : Date
 -eventname : String
 -occasion : String
@@ -93,11 +93,11 @@
     </coordinates>
     <panel_attributes>Message
 --
--messageId : String
--textmessage : String
--eventname : String
--senderId : String
--recipientId : String</panel_attributes>
+-messageId : long
+-eventId : long
+-senderId : long
+-recipientId : long
+-textmessage : String</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -284,18 +284,18 @@ m2=*
   <element>
     <type>com.umlet.element.Interface</type>
     <coordinates>
-      <x>970</x>
+      <x>960</x>
       <y>610</y>
-      <w>140</w>
+      <w>160</w>
       <h>150</h>
     </coordinates>
     <panel_attributes>UserDAO
 --
 create() : User
-read(userId : String)
-update(user : User)
-delete(user : User)
-findAll()</panel_attributes>
+read(userId : long) : User
+update(user : User) : void
+delete(user : User) : void
+findAll() : List&lt;User&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -319,8 +319,8 @@ findAll()</panel_attributes>
     </coordinates>
     <panel_attributes>UserService
 --
-deleteUser(userId : String) : void
-findUserById(userId : String) : User
+deleteUser(userId : long) : void
+findUserById(userId : long) : User
 getUsers() : List&lt;User&gt;
 saveUser(user : User) : void</panel_attributes>
     <additional_attributes/>
@@ -339,18 +339,18 @@ saveUser(user : User) : void</panel_attributes>
   <element>
     <type>com.umlet.element.Interface</type>
     <coordinates>
-      <x>1000</x>
+      <x>980</x>
       <y>990</y>
-      <w>140</w>
+      <w>180</w>
       <h>150</h>
     </coordinates>
     <panel_attributes>EventDAO
 --
 create() : Event
-read(eventId : String)
-update(event : Event)
-delete(event : Event)
-findAll()</panel_attributes>
+read(eventId : long) : Event
+update(event : Event) : void
+delete(event : Event) : void
+findAll() : List&lt;Event&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -402,8 +402,8 @@ findAll()</panel_attributes>
     </coordinates>
     <panel_attributes>EventService
 --
-deleteEvent(eventId : String) : void
-findEventById(eventId : String) : User
+deleteEvent(eventId : long) : void
+findEventById(eventId : long) : User
 getEvents() : List&lt;Event&gt;
 saveEvent(event : Event) : void</panel_attributes>
     <additional_attributes/>
@@ -422,18 +422,18 @@ saveEvent(event : Event) : void</panel_attributes>
   <element>
     <type>com.umlet.element.Interface</type>
     <coordinates>
-      <x>980</x>
+      <x>960</x>
       <y>280</y>
-      <w>180</w>
+      <w>220</w>
       <h>150</h>
     </coordinates>
     <panel_attributes>MessageDAO
 --
 create() : Message
-read(messageId : String)
-update(message : Message)
-delete(message : Message)
-findAll()</panel_attributes>
+read(messageId : long) : Message
+update(message : Message) : void
+delete(message : Message) : void
+findAll() : List&lt;Message&gt;</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -496,8 +496,8 @@ findAll()</panel_attributes>
     </coordinates>
     <panel_attributes>MessageService
 --
-deleteMessage(messageId : String) : void
-findMessageById(messageId : String) : Message
+deleteMessage(messageId : long) : void
+findMessageById(messageId : long) : Message
 getMessages() : List&lt;Message&gt;
 saveMessage(message : Message) : void</panel_attributes>
     <additional_attributes/>
@@ -604,21 +604,21 @@ DELETE User(name : String, password : String) : User
 
 GET Events(date : Date, location : String, gps : int[], occasion : String, perimeter : int) : List&lt;Event&gt;
 
-GET Event(eventId : String) : Event
+GET Event(eventId : long) : Event
 
 POST Event(date : Date, eventName : String, location : String, occasion : String, description : String, numberMaleConfirmed : int, numberFemaleConfirmed : int) : void
 
-POST Event(eventId : String, date : Date, eventName : String, location : String, occasion : String, description : String, numberMaleConfirmed : int, numberFemaleConfirmed : int) : void
+POST Event(eventId : long, date : Date, eventName : String, location : String, occasion : String, description : String, numberMaleConfirmed : int, numberFemaleConfirmed : int) : void
 
-DELETE Event(eventId) : void
+DELETE Event(eventId : long) : void
 
-GET Messages(recipientId : String) : List&lt;Message&gt;
+GET Messages(recipientId : long) : List&lt;Message&gt;
 
-GET Message(messageId : String) : Message
+GET Message(messageId : long) : Message
 
 POST Message(textMessage : String, eventName : String, senderId : String, recipientId : String) : void
 
-DELETE Message(messageId : String) : Message</panel_attributes>
+DELETE Message(messageId : long) : Message</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
