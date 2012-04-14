@@ -1,0 +1,26 @@
+#surefire
+#Sat Apr 14 18:43:37 CEST 2012
+testClassesDirectory=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\target\\test-classes
+useManifestOnlyJar=true
+classPathUrl.1=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\target\\classes
+reportsDirectory=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\target\\surefire-reports
+classPathUrl.0=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\target\\test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit.JUnit3Provider
+testSuiteDefinitionTestSourceDirectory=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\src\\test\\java
+surefireClassPathUrl.1=C\:\\Users\\Ingo\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-api\\2.7.1\\surefire-api-2.7.1.jar
+surefireClassPathUrl.0=C\:\\Users\\Ingo\\.m2\\repository\\org\\apache\\maven\\surefire\\surefire-junit3\\2.7.1\\surefire-junit3-2.7.1.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+excludes0=**/*$*
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+isTrimStackTrace=true
+dirscanner.0.params=C\:\\Users\\Ingo\\Documents\\JavaProjekte\\workspaceComeTogetherApp\\ctShared\\target\\test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+enableAssertions=true
+includes2=**/*TestCase.java
+failIfNoTests=false
+includes1=**/*Test.java
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+includes0=**/Test*.java
+childDelegation=false
