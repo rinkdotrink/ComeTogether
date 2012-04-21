@@ -5,9 +5,9 @@ import de.ct.shared.Message;
 
 public interface ServerREST {
 
-	public String halloWelt();
+//	public String halloWelt();
 	
-	public void Message(Message aMessage);
+//	public void Message(Message aMessage);
 
 	// public void User(String name, String gender, String sex, String password,
 	// String email, Picture picture);

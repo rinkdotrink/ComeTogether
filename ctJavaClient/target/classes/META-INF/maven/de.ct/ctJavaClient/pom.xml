@@ -79,6 +79,18 @@
 			<scope>provided</scope> <!-- muss durch Maven nicht zur Laufzeit zur Verfügung gestellt werden da 
 				diese jar der Tomcat Server hat -->
 		</dependency>
+		
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-spring</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>wstx-asl</artifactId>
+			<version>3.2.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
