@@ -14,11 +14,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import de.ct.Module;
-import de.ct.shared.User;
+import de.ct.shared.Event;
 
 public class UserServiceImplTest {
 
-	UserService userService;
+	EventService eventService;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -31,7 +31,7 @@ public class UserServiceImplTest {
 	@Before
 	public void setUp() throws Exception {
 		Injector injector = Guice.createInjector(new Module());
-		userService = injector.getInstance(UserService.class);
+		eventService = injector.getInstance(EventService.class);
 	}
 
 	@After
@@ -40,43 +40,43 @@ public class UserServiceImplTest {
 
 	@Test
 	public void testCreateNewMessage() {
-		assertNotNull(userService.createNewUser());
+		assertNotNull(eventService.createNewEvent());
 	}
 
 	@Test
-	public void testDeleteUser() {
-		User user = userService.createNewUser();
-		userService.deleteUser(user.getId());
-		User u1 = null;
+	public void testDeleteEvent() {
+		Event event = eventService.createNewEvent();
+		eventService.deleteEvent(event.getEventId());
+		Event e1 = null;
 
-		u1 = userService.findUserById(user.getId());
-		assertNull(u1);
+		e1 = eventService.findEventById(event.getEventId());
+		assertNull(e1);
 	}
 
 	@Test
-	public void testFindUserById() {
-		User user = userService.createNewUser();
-		boolean userFound = false;
+	public void testFindEventById() {
+		Event event = eventService.createNewEvent();
+		boolean eventFound = false;
 
-		if (userService.findUserById(user.getId()) != null) {
-			userFound = true;
+		if (eventService.findEventById(event.getEventId()) != null) {
+			eventFound = true;
 		}
-		assertTrue(userFound);
+		assertTrue(eventFound);
 	}
 
 	@Test
-	public void testGetUsers() {
-		assertNotNull(userService.getUsers());
+	public void testGetEvents() {
+		assertNotNull(eventService.getEvents());
 	}
 
 	@Test
-	public void testSaveUser() {
-		User u = userService.createNewUser();
-		u.setName("Hallo");
-		userService.saveUser(u);
-		User userFound = null;
-		userFound = userService.findUserById(u.getId());
-		assertTrue(userFound.getName().equalsIgnoreCase("Hallo"));
+	public void testSaveEvent() {
+		Event e = eventService.createNewEvent();
+		e.setEventname("Hallo");
+		eventService.saveEvent(e);
+		Event eventFound = null;
+		eventFound = eventService.findEventById(e.getEventId());
+		assertTrue(eventFound.getEventname().equalsIgnoreCase("Hallo"));
 	}
 
 }

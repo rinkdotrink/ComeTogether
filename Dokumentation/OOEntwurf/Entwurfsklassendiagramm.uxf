@@ -15,7 +15,7 @@
 -name : String
 -email : String
 -gender : String
--birthday : Date
+-birthday : Calendar
 -password : String
 -image : Image
 --
@@ -33,7 +33,7 @@
     <panel_attributes>Event
 --
 -eventId : long
--date : Date
+-date : Calendar
 -eventname : String
 -occasion : String
 -location : String
