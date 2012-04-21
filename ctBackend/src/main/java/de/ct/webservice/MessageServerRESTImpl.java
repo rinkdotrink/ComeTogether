@@ -15,11 +15,11 @@ import de.ct.shared.Message;
 
 @Singleton
 @Path("/ct")
-public class ServerMessageRESTImpl  implements ServerMessageREST {
+public class MessageServerRESTImpl  implements MessageServerREST {
 
 	MessageService messageService;
 
-	public ServerMessageRESTImpl() {
+	public MessageServerRESTImpl() {
 		Injector injector = Guice.createInjector(new Module());
 		messageService = injector.getInstance(MessageService.class);
 	}

@@ -3,7 +3,7 @@ package de.ct.webservice;
 import de.ct.shared.Message;
 
 
-public interface ServerMessageREST {
+public interface MessageServerREST {
 
 	public void Message(Message aMessage);
 	
