@@ -14,7 +14,7 @@ import de.ct.service.MessageService;
 import de.ct.shared.Message;
 
 @Singleton
-@Path("/ct")
+@Path("/ctMessage")
 public class MessageServerRESTImpl  implements MessageServerREST {
 
 	MessageService messageService;

@@ -14,7 +14,7 @@ import de.ct.service.UserService;
 import de.ct.shared.User;
 
 @Singleton
-@Path("/ct")
+@Path("/ctUser")
 public class UserServerRESTImpl  implements UserServerREST {
 
 	UserService userService;
@@ -32,7 +32,6 @@ public class UserServerRESTImpl  implements UserServerREST {
 		user.setBirthday(aUser.getBirthday());
 		user.setEmail(aUser.getEmail());
 		user.setGender(aUser.getGender());
-		user.setId(aUser.getId());
 		user.setImage(aUser.getImage());
 		user.setName(aUser.getName());
 		user.setPassword(aUser.getPassword());

@@ -3,6 +3,9 @@ package de.ct.shared;
 import java.awt.Image;
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class User {
 
 	private long id;

@@ -1,56 +1,54 @@
 package de.ct.client;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.ws.rs.core.UriBuilder;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
-import de.ct.shared.Message;
+import de.ct.shared.Event;
 
-public class MyClient {
+public class MyEventClient {
 
 	WebResource service;
 
-	public MyClient() {
+	public MyEventClient() {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		service = client.resource(getBaseURI());
 	}
 
-	public void createMessage(Message aMessage) {
-		service.path("rest").path("ct").path("createMessage").type("text/xml; charset=utf-8")
+	public void createEvent(Event aEvent) {
+		service.path("rest").path("ctEvent").path("createEvent").type("text/xml; charset=utf-8")
 				.accept("text/xml; charset=utf-8")
-				.post(ClientResponse.class, aMessage);
+				.post(ClientResponse.class, aEvent);
 	}
 
-	public Message readMessage(long aMessageId) {
-		Message message = service.path("rest").path("ct").path("readMessage")
+	public Event readEvent(long aEventId) {
+		Event event= service.path("rest").path("ctEvent").path("readEvent")
 				.type("text/xml; charset=utf-8")
 				.accept("text/xml; charset=utf-8")
-				.post(Message.class, String.valueOf(aMessageId));
-		return message;
+				.post(Event.class, String.valueOf(aEventId));
+		return event;
 	}
 	
 //	public List<Message> getMessages() {
-//		List<Message> list = service.path("rest").path("ct")
+//		List<Message> list = service.path("rest").path("ctEvent")
 //				.type("text/xml; charset=utf-8")
 //				.get((new GenericType<List<Message>>() {
 //				}));
 //		return list;
 //	}
 
-	public void deleteMessage(int messageId) {
-		service.path("rest").path("ct").path("deleteMessage")
+	public void deleteEvent(int eventId) {
+		service.path("rest").path("ctEvent").path("deleteEvent")
 				.type("text/xml; charset=utf-8")
 				.accept("text/xml; charset=utf-8")
-				.post(ClientResponse.class, String.valueOf(messageId));
+				.post(ClientResponse.class, String.valueOf(eventId));
 	}
 
 	private static URI getBaseURI() {

@@ -2,6 +2,9 @@ package de.ct.shared;
 
 import java.util.Calendar;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Event {
 
 	private long eventId;

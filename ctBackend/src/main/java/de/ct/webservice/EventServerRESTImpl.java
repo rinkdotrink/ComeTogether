@@ -14,7 +14,7 @@ import de.ct.service.EventService;
 import de.ct.shared.Event;
 
 @Singleton
-@Path("/ct")
+@Path("/ctEvent")
 public class EventServerRESTImpl  implements EventServerREST {
 
 	EventService eventService;
@@ -31,7 +31,6 @@ public class EventServerRESTImpl  implements EventServerREST {
 		Event event = eventService.createNewEvent();
 		event.setDate(aEvent.getDate());
 		event.setDescription(aEvent.getDescription());
-		event.setEventId(aEvent.getEventId());
 		event.setEventname(aEvent.getEventname());
 		event.setGps(aEvent.getGps());
 		event.setLocation(aEvent.getLocation());
