@@ -4,10 +4,10 @@ import de.ct.shared.Message;
 
 public interface MessagePersistence {
 
-	public abstract Message read(final long aMessageId);
+	public Message read(final long aMessageId);
 	
-	public abstract void update(final Message aMessage);
+	public void update(final Message aMessage);
 
-	public abstract void delete(final Message aMessage);
+	public void delete(final Message aMessage);
 
 }

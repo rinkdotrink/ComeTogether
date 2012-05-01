@@ -4,10 +4,10 @@ import de.ct.shared.Event;
 
 public interface EventPersistence {
 
-	public abstract Event read(final long aEventId);
+	public Event read(final long aEventId);
 	
-	public abstract void update(final Event aEvent);
+	public void update(final Event aEvent);
 
-	public abstract void delete(final Event aEvent);
+	public void delete(final Event aEvent);
 
 }

@@ -4,6 +4,7 @@ import java.util.GregorianCalendar;
 
 import de.ct.shared.Event;
 import de.ct.shared.Message;
+import de.ct.shared.Participation;
 import de.ct.shared.User;
 
 public class Main {
@@ -40,6 +41,16 @@ public class Main {
 		userClient.deleteUser(2);
 		System.out.println("user mit ID 1 gelesen: "
 				+ userClient.readUser(1).getUserId());
+		
+		
+		MyParticipationClient participationClient = new MyParticipationClient();
+		participationClient.createParticipation(new Participation());
+		participationClient.createParticipation(new Participation());
+		participationClient.createParticipation(new Participation());
+		participationClient.deleteParticipation(2);
+		System.out.println("Participation mit ID 1 gelesen: "
+				+ participationClient.ParticipationsForEventId(0).get(0).getParticipationId());
+
 	}
 
 }

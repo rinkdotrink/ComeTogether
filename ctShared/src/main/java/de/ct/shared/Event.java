@@ -12,7 +12,7 @@ public class Event {
 
 	private long eventId = 0;
 	private long creatorId = 0;
-	private long eventUserId = 0;
+	
 	private Calendar date = new GregorianCalendar(1900, 0, 1);
 	private String eventname = "";
 	private String occasion = "";
@@ -109,14 +109,6 @@ public class Event {
 
 	public void setCreatorId(long creatorId) {
 		this.creatorId = creatorId;
-	}
-
-	public long getEventUserId() {
-		return eventUserId;
-	}
-
-	public void setEventUserId(long eventUserId) {
-		this.eventUserId = eventUserId;
 	}
 
 }
