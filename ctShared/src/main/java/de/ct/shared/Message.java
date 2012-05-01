@@ -1,6 +1,8 @@
 package de.ct.shared;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -16,6 +18,7 @@ public class Message implements Serializable{
 	private long senderId;
 	private long recipientId;
 	private String textmessage;
+	private Calendar date = new GregorianCalendar(1900, 0, 1);
 
 	public long getMessageId() {
 		return messageId;
@@ -74,6 +77,14 @@ public class Message implements Serializable{
 		}
 
 		return equals;
+	}
+
+	public Calendar getDate() {
+		return date;
+	}
+
+	public void setDate(Calendar date) {
+		this.date = date;
 	}
 
 }

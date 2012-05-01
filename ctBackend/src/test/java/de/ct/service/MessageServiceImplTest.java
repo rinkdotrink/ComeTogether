@@ -46,6 +46,7 @@ public class MessageServiceImplTest {
 	@Test
 	public void testDeleteMessage() {
 		Message message = messageService.createNewMessage();
+		messageService.saveMessage(message);
 		messageService.deleteMessage(message.getMessageId());
 		Message m1 = null;
 
@@ -56,17 +57,13 @@ public class MessageServiceImplTest {
 	@Test
 	public void testFindMessageById() {
 		Message message = messageService.createNewMessage();
+		messageService.saveMessage(message);
 		boolean messageFound = false;
 
 		if (messageService.findMessageById(message.getMessageId()) != null) {
 			messageFound = true;
 		}
 		assertTrue(messageFound);
-	}
-
-	@Test
-	public void testGetMessages() {
-		assertNotNull(messageService.getMessages());
 	}
 
 	@Test

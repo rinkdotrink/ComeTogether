@@ -1,21 +1,26 @@
 package de.ct.shared;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Event {
 
-	private long eventId;
-	private Calendar date;
-	private String eventname;
-	private String occasion;
-	private String location;
-	private int[] gps;
-	private String description;
-	private Integer numberMaleConfirmed;
-	private Integer numberFemaleConfirmed;
+	private long eventId = 0;
+	private long creatorId = 0;
+	private long eventUserId = 0;
+	private Calendar date = new GregorianCalendar(1900, 0, 1);
+	private String eventname = "";
+	private String occasion = "";
+	private String location = "";
+	private List<String> gps = new ArrayList<String>();
+	private String description = "";
+	private Integer numberMaleConfirmed = 0;
+	private Integer numberFemaleConfirmed = 0;
 
 	public long getEventId() {
 		return eventId;
@@ -57,11 +62,11 @@ public class Event {
 		this.location = location;
 	}
 
-	public int[] getGps() {
+	public List<String> getGps() {
 		return gps;
 	}
 
-	public void setGps(int[] gps) {
+	public void setGps(List<String> gps) {
 		this.gps = gps;
 	}
 
@@ -96,6 +101,22 @@ public class Event {
 	
 	public int hashCode(){
 		return (int) this.eventId % 1000;
+	}
+
+	public long getCreatorId() {
+		return creatorId;
+	}
+
+	public void setCreatorId(long creatorId) {
+		this.creatorId = creatorId;
+	}
+
+	public long getEventUserId() {
+		return eventUserId;
+	}
+
+	public void setEventUserId(long eventUserId) {
+		this.eventUserId = eventUserId;
 	}
 
 }

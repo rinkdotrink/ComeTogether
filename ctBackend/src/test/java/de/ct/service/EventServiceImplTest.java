@@ -46,27 +46,24 @@ public class EventServiceImplTest {
 	@Test
 	public void testDeleteUser() {
 		User user = userService.createNewUser();
-		userService.deleteUser(user.getId());
+		userService.saveUser(user);
+		userService.deleteUser(user.getUserId());
 		User u1 = null;
 
-		u1 = userService.findUserById(user.getId());
+		u1 = userService.findUserById(user.getUserId());
 		assertNull(u1);
 	}
 
 	@Test
 	public void testFindUserById() {
 		User user = userService.createNewUser();
+		userService.saveUser(user);
 		boolean userFound = false;
 
-		if (userService.findUserById(user.getId()) != null) {
+		if (userService.findUserById(user.getUserId()) != null) {
 			userFound = true;
 		}
 		assertTrue(userFound);
-	}
-
-	@Test
-	public void testGetUsers() {
-		assertNotNull(userService.getUsers());
 	}
 
 	@Test
@@ -75,7 +72,7 @@ public class EventServiceImplTest {
 		u.setName("Hallo");
 		userService.saveUser(u);
 		User userFound = null;
-		userFound = userService.findUserById(u.getId());
+		userFound = userService.findUserById(u.getUserId());
 		assertTrue(userFound.getName().equalsIgnoreCase("Hallo"));
 	}
 

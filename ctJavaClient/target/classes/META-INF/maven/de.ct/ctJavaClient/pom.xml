@@ -13,6 +13,11 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+		</dependency>
+		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>3.1</version>
@@ -79,7 +84,7 @@
 			<scope>provided</scope> <!-- muss durch Maven nicht zur Laufzeit zur Verfügung gestellt werden da 
 				diese jar der Tomcat Server hat -->
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-spring</artifactId>

@@ -1,7 +1,5 @@
 package de.ct.service;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 
 import de.ct.dao.EventDAO;
@@ -31,11 +29,6 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Event findEventById(final long aEventId) {
 		return eventDAO.read(aEventId);
-	}
-
-	@Override
-	public List<Event> getEvents() {
-		return eventDAO.findAll();
 	}
 
 	@Override

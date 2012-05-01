@@ -1,7 +1,5 @@
 package de.ct.dao;
 
-import java.util.List;
-
 import de.ct.shared.Message;
 
 public interface MessageDAO {
@@ -14,5 +12,4 @@ public interface MessageDAO {
 
 	public void delete(final Message aMessage);
 
-	public List<Message> findAll();
 }

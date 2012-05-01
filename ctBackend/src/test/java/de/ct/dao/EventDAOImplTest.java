@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,6 +49,8 @@ public class EventDAOImplTest {
 	public void testRead() {
 		Event e = eventDAO.create();
 		e.setEventId(1);
+		eventDAO.update(e);
+		
 		Event e2 = null;
 
 		e2 = eventDAO.read(1);
@@ -81,11 +81,5 @@ public class EventDAOImplTest {
 		e2 = eventDAO.read(eventId);
 
 		assertNull(e2);
-	}
-
-	@Test
-	public void testFindAll() {
-		List<Event> events = eventDAO.findAll();
-		assertNotNull(events);
 	}
 }

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -50,6 +48,7 @@ public class MessageDAOImplTest {
 	public void testRead() {
 		Message m = messageDAO.create();
 		m.setMessageId(1);
+		messageDAO.update(m);
 		Message m2 = null;
 
 		m2 = messageDAO.read(1);
@@ -80,12 +79,6 @@ public class MessageDAOImplTest {
 		m2 = messageDAO.read(messageId);
 
 		assertNull(m2);
-	}
-
-	@Test
-	public void testFindAll() {
-		List<Message> messages = messageDAO.findAll();
-		assertNotNull(messages);
 	}
 
 }

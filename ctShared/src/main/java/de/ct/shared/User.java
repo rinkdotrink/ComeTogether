@@ -1,27 +1,27 @@
 package de.ct.shared;
 
-import java.awt.Image;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class User {
 
-	private long id;
-	private String name;
-	private String email;
-	private String gender;
-	private Calendar birthday;
-	private String password;
-	private Image image;
+	private long userId;
+	private String name = "";
+	private String email = "";
+	private String gender = "";
+	private Calendar birthday = new GregorianCalendar(1900, 0, 1);
+	private String password = "";
+	private String image = "";
 
-	public long getId() {
-		return id;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setId(final long aId) {
-		this.id = aId;
+	public void setUserId(final long aId) {
+		this.userId = aId;
 	}
 
 	public String getName() {
@@ -64,21 +64,21 @@ public class User {
 		this.password = aPassword;
 	}
 
-	public Image getImage() {
+	public String getImage() {
 		return image;
 	}
 
-	public void setImage(final Image aImage) {
+	public void setImage(final String aImage) {
 		this.image = aImage;
 	}
 	
 	public boolean equals(Object object){
 		User user = (User) object;
-		return this.id == user.id;
+		return this.userId == user.userId;
 	}
 	
 	public int hashCode(){
-		return (int) this.id % 1000;
+		return (int) this.userId % 1000;
 	}
 
 }

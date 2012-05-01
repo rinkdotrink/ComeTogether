@@ -46,6 +46,7 @@ public class UserServiceImplTest {
 	@Test
 	public void testDeleteEvent() {
 		Event event = eventService.createNewEvent();
+		eventService.saveEvent(event);
 		eventService.deleteEvent(event.getEventId());
 		Event e1 = null;
 
@@ -56,6 +57,7 @@ public class UserServiceImplTest {
 	@Test
 	public void testFindEventById() {
 		Event event = eventService.createNewEvent();
+		eventService.saveEvent(event);
 		boolean eventFound = false;
 
 		if (eventService.findEventById(event.getEventId()) != null) {
@@ -63,12 +65,8 @@ public class UserServiceImplTest {
 		}
 		assertTrue(eventFound);
 	}
-
-	@Test
-	public void testGetEvents() {
-		assertNotNull(eventService.getEvents());
-	}
-
+	
+	
 	@Test
 	public void testSaveEvent() {
 		Event e = eventService.createNewEvent();

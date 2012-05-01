@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -48,11 +46,10 @@ public class UserDAOImplTest {
 
 	@Test
 	public void testRead() {
-		User u = userDAO.create();
-		u.setId(1);
-		User u2 = null;
-
-		u2 = userDAO.read(1);
+		User u = userDAO.create();		
+		userDAO.update(u);
+		User u2 = null;		
+		u2 = userDAO.read(u.getUserId());
 
 		assertNotNull(u2);
 	}
@@ -61,7 +58,7 @@ public class UserDAOImplTest {
 	public void testUpdate() {
 		User user = userDAO.create();
 		user.setName("Name1");
-		long userId = user.getId();
+		long userId = user.getUserId();
 		userDAO.update(user);
 		boolean userUpdated = false;
 
@@ -74,18 +71,12 @@ public class UserDAOImplTest {
 	@Test
 	public void testDelete() {
 		User user = userDAO.create();
-		long userId = user.getId();
+		long userId = user.getUserId();
 		userDAO.delete(user);
 		User u2 = null;
 		u2 = userDAO.read(userId);
 
 		assertNull(u2);
-	}
-
-	@Test
-	public void testFindAll() {
-		List<User> users = userDAO.findAll();
-		assertNotNull(users);
 	}
 
 }

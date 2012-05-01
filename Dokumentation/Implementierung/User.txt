@@ -1,0 +1,20 @@
+-- Table: "user"
+
+-- DROP TABLE "user";
+
+CREATE TABLE "user"
+(
+  userid bigint NOT NULL,
+  name text,
+  email text,
+  gender text,
+  birthday date,
+  password text,
+  image text,
+  CONSTRAINT userid PRIMARY KEY (userid )
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE "user"
+  OWNER TO postgres;

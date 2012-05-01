@@ -1,7 +1,5 @@
 package de.ct.service;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 
 import de.ct.dao.MessageDAO;
@@ -31,11 +29,6 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public Message findMessageById(final long aMessageId) {
 		return messageDAO.read(aMessageId);
-	}
-
-	@Override
-	public List<Message> getMessages() {
-		return messageDAO.findAll();
 	}
 
 	@Override

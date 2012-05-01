@@ -1,7 +1,5 @@
 package de.ct.service;
 
-import java.util.List;
-
 import com.google.inject.Inject;
 
 import de.ct.dao.UserDAO;
@@ -33,10 +31,10 @@ public class UserServiceImpl implements UserService {
 		return userDAO.read(aUserId);
 	}
 
-	@Override
-	public List<User> getUsers() {
-		return userDAO.findAll();
-	}
+//	@Override
+//	public List<User> getUsers() {
+//		return userDAO.findAll();
+//	}
 
 	@Override
 	public User saveUser(final User aUser) {

@@ -3,7 +3,6 @@ package de.ct.datamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.image.BufferedImage;
 import java.util.GregorianCalendar;
 
 import org.junit.After;
@@ -41,14 +40,14 @@ public class UserTest {
 
 	@Test
 	public void testGetId() {
-		user.setId(1);
-		assertEquals(1, user.getId());
+		user.setUserId(1);
+		assertEquals(1, user.getUserId());
 	}
 
 	@Test
 	public void testSetId() {
-		user.setId(1);
-		assertEquals(1, user.getId());
+		user.setUserId(1);
+		assertEquals(1, user.getUserId());
 	}
 
 	@Test
@@ -113,29 +112,29 @@ public class UserTest {
 
 	@Test
 	public void testGetImage() {
-		BufferedImage bi = new BufferedImage(12, 12, 12);
-		user.setImage(bi);
-		assertEquals(bi, user.getImage());
+		
+		user.setImage("Bild");
+		assertEquals("Bild", user.getImage());
 	}
 
 	@Test
 	public void testSetImage() {
-		BufferedImage bi = new BufferedImage(12, 12, 12);
-		user.setImage(bi);
-		assertEquals(bi, user.getImage());
+		
+		user.setImage("Bild");
+		assertEquals("Bild", user.getImage());
 	}
 
 	@Test
 	public void testHashCode() {
-		user.setId(1);
+		user.setUserId(1);
 		assertEquals(1, user.hashCode());
 	}
 
 	@Test
 	public void testEquals() {
 		User userTemp = new User();
-		userTemp.setId(1);
-		user.setId(1);
+		userTemp.setUserId(1);
+		user.setUserId(1);
 		assertTrue(user.equals(userTemp));
 	}
 

@@ -3,7 +3,9 @@ package de.ct.datamodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -103,16 +105,22 @@ public class EventTest {
 
 	@Test
 	public void testGetGps() {
-		int[] intarray = new int[] {1,1,1};
-		event.setGps(intarray);
-		assertEquals(intarray, event.getGps());
+		List<String> gpsArray = new ArrayList<String>();
+		gpsArray.add("1");
+		gpsArray.add("2");
+		gpsArray.add("3");
+		event.setGps(gpsArray);
+		assertEquals(gpsArray, event.getGps());
 	}
 
 	@Test
 	public void testSetGps() {
-		int[] intarray = new int[] {1,1,1};
-		event.setGps(intarray);
-		assertEquals(intarray, event.getGps());
+		List<String> gpsArray = new ArrayList<String>();
+		gpsArray.add("1");
+		gpsArray.add("2");
+		gpsArray.add("3");
+		event.setGps(gpsArray);
+		assertEquals(gpsArray, event.getGps());
 	}
 
 	@Test
