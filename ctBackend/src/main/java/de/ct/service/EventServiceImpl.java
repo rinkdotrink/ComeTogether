@@ -7,7 +7,7 @@ import de.ct.shared.Event;
 
 public class EventServiceImpl implements EventService {
 
-	EventDAO eventDAO;
+	private EventDAO eventDAO;
 
 	@Inject
 	public EventServiceImpl(final EventDAO aEventDAO) {
@@ -21,8 +21,7 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public void deleteEvent(final long aEventId) {
-		Event event;
-		event = eventDAO.read(aEventId);
+		Event event = eventDAO.read(aEventId);
 		eventDAO.delete(event);
 	}
 

@@ -10,11 +10,19 @@ public class UserDAOImpl implements UserDAO {
 
 	private UserPersistence db = new UserPersistenceImpl();
 
+	public UserDAOImpl() {
+
+	}
+
+	public UserDAOImpl(UserPersistence userPersistence) {
+		this.db = userPersistence;
+	}
+
 	@Override
 	public User create() {
 		User u = new User();
-		userId++;
 		u.setUserId(userId);
+		userId++;
 		return u;
 	}
 

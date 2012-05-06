@@ -39,7 +39,7 @@ public class Participation {
 	}
 
 	public int hashCode() {
-		return (int) this.eventId % 1000;
+		return (int) this.participationId % 1000;
 	}
 
 }

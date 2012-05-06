@@ -19,7 +19,7 @@ import com.google.inject.Injector;
 import de.ct.Module;
 import de.ct.shared.Event;
 
-public class EventTest {
+public class EventUnittest {
 
 	Event event;
 

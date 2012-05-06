@@ -13,7 +13,6 @@
 --
 _eventId_
 creatorId
-eventUserId
 date
 eventname
 occasion
@@ -91,10 +90,10 @@ image</panel_attributes>
       <w>130</w>
       <h>120</h>
     </coordinates>
-    <panel_attributes>EventUser
+    <panel_attributes>Participation
 --
-_eventUserId_
-participantId
+_participationId_
+userId
 eventId
 
 </panel_attributes>

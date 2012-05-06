@@ -17,7 +17,7 @@ import com.google.inject.Injector;
 import de.ct.Module;
 import de.ct.shared.User;
 
-public class UserTest {
+public class UserUnittest {
 	User user;
 
 	@BeforeClass

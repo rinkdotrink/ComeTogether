@@ -1,20 +1,27 @@
 package de.ct.dao;
 
 import de.ct.db.EventPersistence;
-import de.ct.db.EventPersistenceImpl;
 import de.ct.shared.Event;
 
 public class EventDAOImpl implements EventDAO {
 
 	private static long eventId = 0;
 	
-	private EventPersistence db = new EventPersistenceImpl();
+	private EventPersistence db;
+	
+	public EventDAOImpl(EventPersistence eventPersistence){
+		this.db = eventPersistence;
+	}
+	
+	public EventDAOImpl() {
+		
+	}
 
 	@Override
 	public Event create() {
-		Event e = new Event();
-		eventId++;
+		Event e = new Event();		
 		e.setEventId(eventId);
+		eventId++;
 		return e;
 	}
 

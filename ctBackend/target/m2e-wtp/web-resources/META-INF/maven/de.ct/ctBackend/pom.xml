@@ -108,7 +108,7 @@
 			<scope>provided</scope> <!-- muss durch Maven nicht zur Laufzeit zur Verfügung gestellt werden da 
 				diese jar der Tomcat Server hat -->
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-spring</artifactId>
@@ -132,6 +132,53 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
+
+
+<!-- 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>dbunit-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+
+				jar file that has the jdbc driver
+				<dependencies>
+					<dependency>
+
+						<groupId>postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>9.1-901.jdbc4</version>
+
+					</dependency>
+				</dependencies>
+
+				common configurations
+				<configuration>
+					<driver>org.postgresql.Driver</driver>
+					<url>jdbc:postgresql://127.0.0.1:5432/ctdb</url>
+					<username>postgres</username>
+					<password>ChristofIngo2012</password>
+				</configuration>
+
+
+
+				<executions>
+					<execution>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>operation</goal>
+						</goals>
+						<configuration>
+							<format>flat</format>
+							<type>CLEAN_INSERT</type>
+							<src>src/main/resources/opc1.xml</src>
+						</configuration>
+					</execution>
+				</executions>
+ 
+
+			</plugin>
+			-->
 		</plugins>
 		<finalName>ctBackend</finalName>
 	</build>

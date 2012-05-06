@@ -6,15 +6,23 @@ import de.ct.shared.Message;
 
 public class MessageDAOImpl implements MessageDAO {
 
-	private MessagePersistence db = new MessagePersistenceImpl();
-	
+	private MessagePersistence db;
+
 	private static long messageId = 0;
+
+	public MessageDAOImpl(MessagePersistence messagePersistence) {
+		this.db = messagePersistence;
+	}
+
+	public MessageDAOImpl() {
+
+	}
 
 	@Override
 	public Message create() {
 		Message m = new Message();
-		messageId++;
 		m.setMessageId(messageId);
+		messageId++;
 		return m;
 	}
 
