@@ -10,6 +10,14 @@ import de.ct.dao.ParticipationDAO;
 import de.ct.dao.ParticipationDAOImpl;
 import de.ct.dao.UserDAO;
 import de.ct.dao.UserDAOImpl;
+import de.ct.db.EventPersistence;
+import de.ct.db.EventPersistenceImpl;
+import de.ct.db.MessagePersistence;
+import de.ct.db.MessagePersistenceImpl;
+import de.ct.db.ParticipationPersistence;
+import de.ct.db.ParticipationPersistenceImpl;
+import de.ct.db.UserPersistence;
+import de.ct.db.UserPersistenceImpl;
 import de.ct.service.EventService;
 import de.ct.service.EventServiceImpl;
 import de.ct.service.MessageService;
@@ -39,5 +47,9 @@ public class Module extends AbstractModule {
 		bind(UserService.class).to(UserServiceImpl.class);
 		bind(EventService.class).to(EventServiceImpl.class);
 		bind(ParticipationService.class).to(ParticipationServiceImpl.class);
+		bind(MessagePersistence.class).to(MessagePersistenceImpl.class);
+		bind(EventPersistence.class).to(EventPersistenceImpl.class);
+		bind(ParticipationPersistence.class).to(ParticipationPersistenceImpl.class);
+		bind(UserPersistence.class).to(UserPersistenceImpl.class);
 	}
 }

@@ -1,5 +1,7 @@
 package de.ct.dao;
 
+import com.google.inject.Inject;
+
 import de.ct.db.UserPersistence;
 import de.ct.db.UserPersistenceImpl;
 import de.ct.shared.User;
@@ -14,6 +16,7 @@ public class UserDAOImpl implements UserDAO {
 
 	}
 
+	@Inject
 	public UserDAOImpl(UserPersistence userPersistence) {
 		this.db = userPersistence;
 	}

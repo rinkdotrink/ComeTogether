@@ -2,6 +2,8 @@ package de.ct.dao;
 
 import java.util.List;
 
+import com.google.inject.Inject;
+
 import de.ct.db.ParticipationPersistence;
 import de.ct.shared.Participation;
 
@@ -14,6 +16,7 @@ public class ParticipationDAOImpl implements ParticipationDAO {
 	public ParticipationDAOImpl() {
 	}
 
+	@Inject
 	public ParticipationDAOImpl(ParticipationPersistence participationPersistence) {
 		this.db = participationPersistence;
 	}

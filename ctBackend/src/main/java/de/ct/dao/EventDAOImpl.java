@@ -1,5 +1,7 @@
 package de.ct.dao;
 
+import com.google.inject.Inject;
+
 import de.ct.db.EventPersistence;
 import de.ct.shared.Event;
 
@@ -9,6 +11,7 @@ public class EventDAOImpl implements EventDAO {
 	
 	private EventPersistence db;
 	
+	@Inject
 	public EventDAOImpl(EventPersistence eventPersistence){
 		this.db = eventPersistence;
 	}
