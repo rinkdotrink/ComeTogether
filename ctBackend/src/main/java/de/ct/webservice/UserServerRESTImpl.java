@@ -36,6 +36,8 @@ public class UserServerRESTImpl  implements UserServerREST {
 		user.setName(aUser.getName());
 		user.setPassword(aUser.getPassword());
 		
+		System.out.println("user created");
+		
 		userService.saveUser(user);
 	}
 
