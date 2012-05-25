@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.4">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.custom.EER_Entity</type>
+    <coordinates>
+      <x>10</x>
+      <y>160</y>
+      <w>290</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Event
+--
+_eventId_
+creatorId
+date
+eventname
+occasion
+location
+gps
+description
+numberMaleConfirmed
+numberFemaleConfirmed</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.EER_Entity</type>
+    <coordinates>
+      <x>390</x>
+      <y>280</y>
+      <w>210</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Message
+--
+_messageId_
+eventId
+senderId
+recipientId
+textmessage
+date</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.EER_Entity</type>
+    <coordinates>
+      <x>680</x>
+      <y>170</y>
+      <w>220</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>User
+--
+_userId_
+name
+email
+gender
+birthday
+password
+image</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>570</x>
+      <y>160</y>
+      <w>130</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;EER</panel_attributes>
+    <additional_attributes>30;130;110;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>270</x>
+      <y>150</y>
+      <w>430</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=EER&gt;</panel_attributes>
+    <additional_attributes>410;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.custom.EER_Entity</type>
+    <coordinates>
+      <x>430</x>
+      <y>30</y>
+      <w>130</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Participation
+--
+_participationId_
+userId
+eventId
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>270</x>
+      <y>10</y>
+      <w>180</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;EER</panel_attributes>
+    <additional_attributes>160;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>530</x>
+      <y>10</y>
+      <w>170</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=EER&gt;</panel_attributes>
+    <additional_attributes>150;160;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>270</x>
+      <y>160</y>
+      <w>140</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;EER</panel_attributes>
+    <additional_attributes>120;130;30;30</additional_attributes>
+  </element>
+</diagram>

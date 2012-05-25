@@ -1,0 +1,12 @@
+-- Database: ctdb
+
+-- DROP DATABASE ctdb;
+
+CREATE DATABASE ctdb
+  WITH OWNER = postgres
+       ENCODING = 'UTF8'
+       TABLESPACE = pg_default
+       LC_COLLATE = 'German, Germany'
+       LC_CTYPE = 'German, Germany'
+       CONNECTION LIMIT = -1;
+
