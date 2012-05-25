@@ -8,6 +8,7 @@
 *.prefs
 *.project
 /logs
+/target
 *.aux
 *.bbl
 *.blg
