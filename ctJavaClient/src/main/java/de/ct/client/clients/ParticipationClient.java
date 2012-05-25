@@ -35,7 +35,7 @@ public class ParticipationClient {
 	}
 	
 
-	public void deleteParticipation(int aParticipationId) {
+	public void deleteParticipation(long aParticipationId) {
 		participationDeleter.deleteParticipation(aParticipationId);
 	}
 

@@ -54,12 +54,12 @@ public class Main {
 		System.out.println("Participation erstellt mit id: "
 				+ participation.getParticipationId());
 		System.out.println("Participation gelesen mit event id: "
-				+ participationClient.ParticipationsForEventId(0).get(0)
+				+ participationClient.ParticipationsForEventId(participation.getEventId()).get(0)
 						.getParticipationId());
 		System.out.println("Participation gelesen mit user id: "
-				+ participationClient.ParticipationsForUserId(0).get(0)
+				+ participationClient.ParticipationsForUserId(participation.getUserId()).get(0)
 						.getParticipationId());
-		participationClient.deleteParticipation(0);
+		participationClient.deleteParticipation(participation.getParticipationId());
 	}
 
 }
