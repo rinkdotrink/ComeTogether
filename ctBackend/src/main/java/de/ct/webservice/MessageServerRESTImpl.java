@@ -4,16 +4,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sun.jersey.spi.resource.Singleton;
 
 import de.ct.Module;
 import de.ct.service.MessageService;
 import de.ct.shared.Message;
 
-@Singleton
 @Path("/ctMessage")
 public class MessageServerRESTImpl  implements MessageServerREST {
 
@@ -26,32 +25,38 @@ public class MessageServerRESTImpl  implements MessageServerREST {
 
 	@POST
 	@Path("/createMessage")
-	@Consumes("text/xml")
-	public void Message(Message aMessage) {
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Message Message(Message aMessage) {
 		Message message = messageService.createNewMessage();
 		message.setTextmessage(aMessage.getTextmessage());
 		message.setSenderId(aMessage.getSenderId());
 		message.setRecipientId(aMessage.getRecipientId());
 		message.setEventId(aMessage.getEventId());
-		messageService.saveMessage(message);
+		Message message2 = messageService.saveMessage(message);
+		return message2;
 	}
 
 	@POST
 	@Path("/readMessage")
-	@Produces("text/xml")
-	@Consumes("text/xml")
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
 	public Message Message(String aMessageId) {
-		long messageId = Long.parseLong(aMessageId);
+		String id = aMessageId.substring(7, 8);
+		long messageId = Long.parseLong(id);
 		Message message = messageService.findMessageById(messageId);
 		return message;
 	}
 
 	@POST
 	@Path("/deleteMessage")
-	@Consumes("text/xml")
-	public void deleteMessage(String aMessageId) {
-		long messageId = Long.parseLong(aMessageId);
+	@Consumes("application/x-www-form-urlencoded")
+	public Response deleteMessage(String aMessageId) {
+		String id = aMessageId.substring(7, 8);
+		long messageId = Long.parseLong(id);		
 		messageService.deleteMessage(messageId);
+		String result = "Message deleted: " + messageId;
+		return Response.status(201).entity(result).build();
 	}
 
 //	@GET

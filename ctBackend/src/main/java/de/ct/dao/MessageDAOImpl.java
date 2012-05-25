@@ -3,11 +3,12 @@ package de.ct.dao;
 import com.google.inject.Inject;
 
 import de.ct.db.MessagePersistence;
+import de.ct.db.MessagePersistenceImpl;
 import de.ct.shared.Message;
 
 public class MessageDAOImpl implements MessageDAO {
 
-	private MessagePersistence db;
+	private MessagePersistence db = new MessagePersistenceImpl();
 
 	private static long messageId = 0;
 

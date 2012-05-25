@@ -4,16 +4,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sun.jersey.spi.resource.Singleton;
+//import com.sun.jersey.spi.resource.Singleton;
 
 import de.ct.Module;
 import de.ct.service.EventService;
 import de.ct.shared.Event;
 
-@Singleton
 @Path("/ctEvent")
 public class EventServerRESTImpl  implements EventServerREST {
 
@@ -26,8 +26,9 @@ public class EventServerRESTImpl  implements EventServerREST {
 
 	@POST
 	@Path("/createEvent")
-	@Consumes("text/xml")
-	public void Event(Event aEvent) {
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Event Event(Event aEvent) {
 		Event event = eventService.createNewEvent();
 		event.setDate(aEvent.getDate());
 		event.setDescription(aEvent.getDescription());
@@ -36,28 +37,32 @@ public class EventServerRESTImpl  implements EventServerREST {
 		event.setLocation(aEvent.getLocation());
 		event.setNumberFemaleConfirmed(aEvent.getNumberFemaleConfirmed());
 		event.setNumberMaleConfirmed(aEvent.getNumberMaleConfirmed());
-		event.setOccasion(aEvent.getOccasion());
+		event.setOccasion(aEvent.getOccasion());	
 		
-		
-		eventService.saveEvent(event);
+		Event event2 = eventService.saveEvent(event);
+		return event2;
 	}
 
 	@POST
 	@Path("/readEvent")
-	@Produces("text/xml")
-	@Consumes("text/xml")
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
 	public Event Event(String aEventId) {
-		long eventId = Long.parseLong(aEventId);
+		String id = aEventId.substring(7, 8);
+		long eventId = Long.parseLong(id);
 		Event event = eventService.findEventById(eventId);
 		return event;
 	}
 
 	@POST
 	@Path("/deleteEvent")
-	@Consumes("text/xml")
-	public void deleteEvent(String aEventId) {
-		long eventId = Long.parseLong(aEventId);
+	@Consumes("application/x-www-form-urlencoded")
+	public Response deleteEvent(String aEventId) {
+		String id = aEventId.substring(7, 8);
+		long eventId = Long.parseLong(id);
 		eventService.deleteEvent(eventId);
+		String result = "Event deleted: " + eventId;
+		return Response.status(201).entity(result).build();
 	}
 
 //	@GET

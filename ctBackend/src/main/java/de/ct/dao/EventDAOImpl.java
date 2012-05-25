@@ -3,21 +3,22 @@ package de.ct.dao;
 import com.google.inject.Inject;
 
 import de.ct.db.EventPersistence;
+import de.ct.db.EventPersistenceImpl;
 import de.ct.shared.Event;
 
 public class EventDAOImpl implements EventDAO {
 
 	private static long eventId = 0;
 	
-	private EventPersistence db;
+	private EventPersistence db = new EventPersistenceImpl();
 	
-	@Inject
-	public EventDAOImpl(EventPersistence eventPersistence){
-		this.db = eventPersistence;
+	public EventDAOImpl(){
+		
 	}
 	
-	public EventDAOImpl() {
-		
+	@Inject
+	public EventDAOImpl(EventPersistence eventPersistence) {
+		this.db = eventPersistence;		
 	}
 
 	@Override

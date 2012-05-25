@@ -6,16 +6,15 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.sun.jersey.spi.resource.Singleton;
 
 import de.ct.Module;
 import de.ct.service.ParticipationService;
 import de.ct.shared.Participation;
 
-@Singleton
 @Path("/ctParticipation")
 public class ParticipationServerRESTImpl  implements ParticipationServerREST {
 
@@ -28,40 +27,47 @@ public class ParticipationServerRESTImpl  implements ParticipationServerREST {
 
 	@POST
 	@Path("/createParticipation")
-	@Consumes("text/xml")
-	public void Participation(Participation aParticipation) {
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Participation Participation(Participation aParticipation) {
 		Participation participation = participationService.createNewParticipation();
 		participation.setEventId(aParticipation.getEventId());
 		participation.setUserId(aParticipation.getUserId());	
-		participationService.saveParticipation(participation);
+		Participation participation2 = participationService.saveParticipation(participation);
+		return participation2;
 	}
 
 	@POST
-	@Path("/ParticipationsForEventId")
-	@Produces("text/xml")
-	@Consumes("text/xml")
+	@Path("/readParticipationsForEventId")
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
 	public List<Participation> ParticipationsForEventId(final String aEventId) {
-		Long eventId = Long.valueOf(aEventId);
+		String id = aEventId.substring(7, 8);
+		Long eventId = Long.valueOf(id);
 		List<Participation> participations = participationService.getParticipationsForEventId(eventId);
 		return participations;
 	}
 	
 	@POST
-	@Path("/ParticipationsForUserId")
-	@Produces("text/xml")
-	@Consumes("text/xml")
+	@Path("/readParticipationsForUserId")
+	@Produces("application/json")
+	@Consumes("application/x-www-form-urlencoded")
 	public List<Participation> ParticipationsForUserId(final String aUserId) {
-		Long userId = Long.valueOf(aUserId);
+		String id = aUserId.substring(7, 8);
+		Long userId = Long.valueOf(id);
 		List<Participation> participations = participationService.getParticipationsForUserId(userId);
 		return participations;
 	}
 
 	@POST
 	@Path("/deleteParticipation")
-	@Consumes("text/xml")
-	public void deleteParticipation(String aParticipationId) {
-		long participationId = Long.parseLong(aParticipationId);
+	@Consumes("application/x-www-form-urlencoded")
+	public Response deleteParticipation(String aParticipationId) {
+		String id = aParticipationId.substring(7, 8);
+		long participationId = Long.parseLong(id);
 		participationService.deleteParticipation(participationId);
+		String result = "Participation deleted: " + id;
+		return Response.status(201).entity(result).build();
 	}
 
 //	@GET
