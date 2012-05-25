@@ -9,6 +9,9 @@
 *.project
 /logs
 /target
+*/target
+.settings
+*/.settings
 *.aux
 *.bbl
 *.blg
