@@ -106,8 +106,8 @@ public abstract class Reader {
 
 	protected Product getProduct(final long aId, final Product aProduct) {
 		write(aId);
-		Product event = evaluateServerResponse(aProduct);
-		return event;
+		Product product = evaluateServerResponse(aProduct);
+		return product;
 	}
 
 }
