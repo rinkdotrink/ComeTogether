@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>40</y>
+      <w>650</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Creator
+--
+--
++createKunde(aId : long, aName : String, aKundenNr : long) : Product
++createProdukt(aId : long, aName : String, aPreis : Integer) : Product
++createWKorb(aId : long, aKundenId : long) : FactoryMethodProduct
++createProdukteInWKorb(aBestellzeileId : long, aWaKorbId : long, aProduktId : long) : Product</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>610</x>
+      <y>100</y>
+      <w>50</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>-70;-20;-70;-20</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>10</x>
+      <y>0</y>
+      <w>690</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>de.datagenerator.creator
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>210</x>
+      <y>310</y>
+      <w>280</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Warenkorb
+--
+-id : long
+-kundenId : long
+--
++Warenkorb(aId : long, aKundenId : long)
++setId(aId : long) : void
++getId() : long
++setKundenId(kundenId : long) : void
++getKundenId() : long</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>160</x>
+      <y>490</y>
+      <w>350</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Produkt
+--
+-id : long
+-name : String
+-preisInCent : int
+--
++Produkt(aId : long, aName : String, aPreisInCent : int)
++setId(aId : long) : void
++getId() : long
++setName(aName : String) : void
++getName() : String
++setPreisInCent(preisInCent : int) : void
++getPreisInCent() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>120</x>
+      <y>200</y>
+      <w>70</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;50;290</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>110</x>
+      <y>200</y>
+      <w>60</w>
+      <h>540</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>40;30;30;520</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>120</x>
+      <y>200</y>
+      <w>120</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;100;110</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>40</x>
+      <y>210</y>
+      <w>220</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Product
+--
++equals(aObject : Object) : boolean
++hashCode() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>450</x>
+      <y>120</y>
+      <w>50</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;190;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>470</x>
+      <y>120</y>
+      <w>50</w>
+      <h>390</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;370;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>490</x>
+      <y>120</y>
+      <w>50</w>
+      <h>620</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;600;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>510</x>
+      <y>120</y>
+      <w>50</w>
+      <h>850</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>30;830;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>80</x>
+      <y>200</y>
+      <w>90</w>
+      <h>770</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>70;30;30;750</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>130</x>
+      <y>720</y>
+      <w>400</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Kunde
+--
+-id : long
+-name : String
+-kundenNr : long
+--
++Kunde(aId : long, aName : String, aKundenNr : long)
++getId() : long
++setId(aId : long) : void
++getName() : String
++setName(aName : String) : void
++getKundenNr() : long
++setKundenNr(aKundenNr : long) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>100</x>
+      <y>950</y>
+      <w>470</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>WKorbProdukt
+--
+-bestellzeileId : long
+-wKorbProduktId : long
+-produktId : long
+--
++WKorbProdukt(aBestellzeileId : long, aWKorbId long, aProduktId : long)
++setBestellzeileId(aBestellzeileId : long) : void
++getBestellzeileId() : long
++setWKorbProduktId(aWKorbProduktId : long) : void
++getWKorbProduktId() : long
++setProduktId(aProduktId : long) : void
++getProduktId() : long</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>10</x>
+      <y>180</y>
+      <w>690</w>
+      <h>1000</h>
+    </coordinates>
+    <panel_attributes>de.datagenerator.datamodel
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

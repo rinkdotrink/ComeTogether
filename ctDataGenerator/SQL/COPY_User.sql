@@ -1,0 +1,1 @@
+﻿COPY public.User (userId, name, email, gender, birthday, password, image) From 'C:\User.txt' DELIMITER ';'

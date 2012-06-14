@@ -1,0 +1,1 @@
+﻿COPY public.Message (messageid, eventid, senderid, recipientid, textmessage, date) From 'C:\Message.txt' DELIMITER ';'
