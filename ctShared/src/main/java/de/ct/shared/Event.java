@@ -1,9 +1,7 @@
 package de.ct.shared;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 //import javax.xml.bind.annotation.XmlRootElement;
 
@@ -17,10 +15,11 @@ public class Event implements Product {
 	private String eventname = "";
 	private String occasion = "";
 	private String location = "";
-	private List<String> gps = new ArrayList<String>();
 	private String description = "";
 	private Integer numberMaleConfirmed = 0;
 	private Integer numberFemaleConfirmed = 0;
+	private double lonRad = 0;
+	private double latRad = 0;
 
 	public Event() {
 
@@ -29,9 +28,10 @@ public class Event implements Product {
 	public Event(final long aEventId, final long aCreatorId,
 			final Calendar aDate, final String aEventname,
 			final String aOccasion, final String aLocation,
-			final List<String> aGps, final String aDescription,
+			final String aDescription,
 			final Integer aNumberOfMaleConfirmed,
-			final Integer aNumberOfFemaleConfirmed) {
+			final Integer aNumberOfFemaleConfirmed, final double aLonrad,
+			final double aLatrad) {
 
 		this.eventId = aEventId;
 		this.creatorId = aCreatorId;
@@ -39,10 +39,11 @@ public class Event implements Product {
 		this.eventname = aEventname;
 		this.occasion = aOccasion;
 		this.location = aLocation;
-		this.gps = aGps;
 		this.description = aDescription;
 		this.numberMaleConfirmed = aNumberOfMaleConfirmed;
 		this.numberFemaleConfirmed = aNumberOfFemaleConfirmed;
+		this.lonRad = aLonrad;
+		this.latRad = aLatrad;
 	}
 
 	public boolean equals(final Object aObject) {
@@ -58,7 +59,8 @@ public class Event implements Product {
 							.getDescription()))
 					&& (this.eventname.equalsIgnoreCase(event.getEventname()))
 					&& (this.eventUserId == event.getEventUserId())
-					&& (this.gps.equals(event.getGps()))
+					&& (this.lonRad == event.getLonRad())
+					&& (this.latRad == event.getLatRad())
 					&& (this.location.equalsIgnoreCase(event.getLocation()))
 					&& (this.numberFemaleConfirmed == event
 							.getNumberFemaleConfirmed())
@@ -117,14 +119,6 @@ public class Event implements Product {
 		this.location = aLocation;
 	}
 
-	public List<String> getGps() {
-		return gps;
-	}
-
-	public void setGps(final List<String> aGps) {
-		this.gps = aGps;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -163,6 +157,22 @@ public class Event implements Product {
 
 	public void setEventUserId(final long aEventUserId) {
 		this.eventUserId = aEventUserId;
+	}
+
+	public double getLonRad() {
+		return lonRad;
+	}
+
+	public void setLonRad(double lonRad) {
+		this.lonRad = lonRad;
+	}
+
+	public double getLatRad() {
+		return latRad;
+	}
+
+	public void setLatRad(double latRad) {
+		this.latRad = latRad;
 	}
 
 }
