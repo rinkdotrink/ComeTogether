@@ -4,6 +4,8 @@ import static org.easymock.EasyMock.createControl;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 
+import java.util.Random;
+
 import org.easymock.IMocksControl;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -27,6 +29,7 @@ public class ParticipationGeneratorTest {
 	private ParticipationGenerator classUnderTest;
 	private IWriter mock;
 	private Injector injector = Guice.createInjector(new DBModule());
+	private Random random;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -67,7 +70,10 @@ public class ParticipationGeneratorTest {
 		long participationPerUser = 1;
 		long eventPerUser = 1;
 
-		Product participation0 = new Participation(0, 0, 0);
+		random = new Random(0);		
+		long userId = computeIntBetween0andUser(user);
+		
+		Product participation0 = new Participation(0, userId, 0);
 		mock.write(participation0);
 		mock.close();
 		replay(mock);
@@ -81,8 +87,13 @@ public class ParticipationGeneratorTest {
 		long participationPerUser = 2;
 		long eventPerUser = 1;
 
-		Product participation0 = new Participation(0, 0, 0);
-		Product participation1 = new Participation(1, 0, 0);
+		random = new Random(0);		
+		long userId = computeIntBetween0andUser(user);
+		
+		Product participation0 = new Participation(0, userId, 0);
+		
+		userId = computeIntBetween0andUser(user);
+		Product participation1 = new Participation(1, userId, 0);
 		
 		mock.write(participation0);
 		mock.write(participation1);
@@ -99,10 +110,19 @@ public class ParticipationGeneratorTest {
 		long participationPerUser = 2;
 		long eventPerUser = 2;
 
-		Product participation0 = new Participation(0, 0, 0);
-		Product participation1 = new Participation(1, 1, 1);
-		Product participation2 = new Participation(2, 0, 2);
-		Product participation3 = new Participation(3, 1, 3);
+		random = new Random(0);
+		long userId = computeIntBetween0andUser(user);		
+		
+		Product participation0 = new Participation(0, userId, 0);
+		
+		userId = computeIntBetween0andUser(user);
+		Product participation1 = new Participation(1, userId, 1);
+		
+		userId = computeIntBetween0andUser(user);
+		Product participation2 = new Participation(2, userId, 2);
+		
+		userId = computeIntBetween0andUser(user);
+		Product participation3 = new Participation(3, userId, 3);
 		
 		mock.write(participation0);
 		mock.write(participation1);
@@ -113,5 +133,12 @@ public class ParticipationGeneratorTest {
 		replay(mock);
 		classUnderTest.generateParticipation(participationPerUser, user, eventPerUser);
 		verify(mock);
+	}
+	
+	private long computeIntBetween0andUser(long aUser) {
+		double randomDouble = random.nextDouble();
+		int int0_100 = (int) Math.ceil(randomDouble * aUser);
+		long int0_User = int0_100 % aUser;
+		return int0_User;
 	}
 }

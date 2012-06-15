@@ -18,8 +18,8 @@ public class Event implements Product {
 	private String description = "";
 	private Integer numberMaleConfirmed = 0;
 	private Integer numberFemaleConfirmed = 0;
-	private double lonRad = 0;
-	private double latRad = 0;
+	private double lon = 0;
+	private double lat = 0;
 
 	public Event() {
 
@@ -30,8 +30,8 @@ public class Event implements Product {
 			final String aOccasion, final String aLocation,
 			final String aDescription,
 			final Integer aNumberOfMaleConfirmed,
-			final Integer aNumberOfFemaleConfirmed, final double aLonrad,
-			final double aLatrad) {
+			final Integer aNumberOfFemaleConfirmed, final double aLon,
+			final double aLat) {
 
 		this.eventId = aEventId;
 		this.creatorId = aCreatorId;
@@ -42,8 +42,8 @@ public class Event implements Product {
 		this.description = aDescription;
 		this.numberMaleConfirmed = aNumberOfMaleConfirmed;
 		this.numberFemaleConfirmed = aNumberOfFemaleConfirmed;
-		this.lonRad = aLonrad;
-		this.latRad = aLatrad;
+		this.lon = aLon;
+		this.lat = aLat;
 	}
 
 	public boolean equals(final Object aObject) {
@@ -59,8 +59,8 @@ public class Event implements Product {
 							.getDescription()))
 					&& (this.eventname.equalsIgnoreCase(event.getEventname()))
 					&& (this.eventUserId == event.getEventUserId())
-					&& (this.lonRad == event.getLonRad())
-					&& (this.latRad == event.getLatRad())
+					&& (this.lon == event.getLonRad())
+					&& (this.lat == event.getLatRad())
 					&& (this.location.equalsIgnoreCase(event.getLocation()))
 					&& (this.numberFemaleConfirmed == event
 							.getNumberFemaleConfirmed())
@@ -160,19 +160,19 @@ public class Event implements Product {
 	}
 
 	public double getLonRad() {
-		return lonRad;
+		return lon;
 	}
 
-	public void setLonRad(double lonRad) {
-		this.lonRad = lonRad;
+	public void setLonRad(double aLon) {
+		this.lon = aLon;
 	}
 
 	public double getLatRad() {
-		return latRad;
+		return lat;
 	}
 
-	public void setLatRad(double latRad) {
-		this.latRad = latRad;
+	public void setLatRad(double aLat) {
+		this.lat = aLat;
 	}
 
 }

@@ -24,7 +24,7 @@ public class ParticipationWriter extends Writer {
 
 	private void writeParticipation(final Participation aParticipation) {
 		String s = "" + aParticipation.getParticipationId() + ";"
-				+ aParticipation.getUserId() + ";" + aParticipation.getUserId()
+				+ aParticipation.getUserId() + ";" + aParticipation.getEventId()
 				+ "\n";
 		try {
 			writer.write(s);

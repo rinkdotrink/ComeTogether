@@ -105,28 +105,28 @@ public class EventUnittest {
 	public void testGetLonRad() {
 		double lonrad = 2;
 		event.setLonRad(lonrad);
-		assertEquals(lonrad, event.getLonRad(),0.1);
+		assertEquals(lonrad, event.getLon(),0.1);
 	}
 	
 	@Test
 	public void testSetLonRad() {
 		double lonrad = 2;
 		event.setLonRad(lonrad);
-		assertEquals(lonrad, event.getLonRad(),0.1);
+		assertEquals(lonrad, event.getLon(),0.1);
 	}
 
 	@Test
 	public void testGetLatRad() {
 		double latrad = 2;
 		event.setLonRad(latrad);
-		assertEquals(latrad, event.getLatRad(),0.1);
+		assertEquals(latrad, event.getLat(),0.1);
 	}
 
 	@Test
 	public void testSetLatRad() {
 		double latrad = 2;
 		event.setLonRad(latrad);
-		assertEquals(latrad, event.getLatRad(),0.1);
+		assertEquals(latrad, event.getLat(),0.1);
 	}
 	
 

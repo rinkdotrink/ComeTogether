@@ -1,5 +1,7 @@
 package de.datagenerator.generator;
 
+import java.util.Random;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
@@ -8,6 +10,8 @@ import de.datagenerator.writer.IWriter;
 
 public class ParticipationGenerator extends Generator {
 
+	private Random random = new Random(0);
+	
 	@Inject
 	public ParticipationGenerator(final Creator aCreator,
 			@Named("Participation") final IWriter aDbWriter) {
@@ -27,7 +31,7 @@ public class ParticipationGenerator extends Generator {
 
 		for (long i = 0; i < participtions; i++) {
 			participationId = i;
-			userId = i % aUser;
+			userId = computeIntBetween0andUser(aUser);
 			eventId = i % events;
 			setProduct(getCreator().createParticipation(participationId,
 					userId, eventId));
@@ -35,5 +39,11 @@ public class ParticipationGenerator extends Generator {
 		}
 		getDBWriter().close();
 	}
-
+	
+	private long computeIntBetween0andUser(long aUser) {
+		double randomDouble = random.nextDouble();
+		int int0_100 = (int) Math.ceil(randomDouble * aUser);
+		long int0_User = int0_100 % aUser;
+		return int0_User;
+	}
 }

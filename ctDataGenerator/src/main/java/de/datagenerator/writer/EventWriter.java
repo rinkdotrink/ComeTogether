@@ -25,10 +25,10 @@ public class EventWriter extends Writer {
 	private void writeEvent(final Event aEvent) {
 		String date = df.format(aEvent.getDate().getTime());
 		String s = aEvent.getEventId() + ";" + aEvent.getCreatorId() + ";"
-				+ aEvent.getEventUserId() + ";" + date + ";"
+				+ date + ";"
 				+ aEvent.getEventname() + ";" + aEvent.getOccasion() + ";"
-				+ aEvent.getLocation() + ";" + aEvent.getLonRad()
-				+ " " + aEvent.getLatRad() + ";" + aEvent.getDescription() + ";"
+				+ aEvent.getLocation() + ";" + aEvent.getLon()
+				+ ";" + aEvent.getLat() + ";" + aEvent.getDescription() + ";"
 				+ aEvent.getNumberMaleConfirmed() + ";"
 				+ aEvent.getNumberFemaleConfirmed() + "\n";
 		try {

@@ -38,8 +38,8 @@ public class EventServerRESTImpl  implements EventServerREST {
 		event.setDate(aEvent.getDate());
 		event.setDescription(aEvent.getDescription());
 		event.setEventname(aEvent.getEventname());
-		event.setLonRad(aEvent.getLonRad());
-		event.setLatRad(aEvent.getLatRad());
+		event.setLonRad(aEvent.getLon());
+		event.setLatRad(aEvent.getLat());
 		event.setLocation(aEvent.getLocation());
 		event.setNumberFemaleConfirmed(aEvent.getNumberFemaleConfirmed());
 		event.setNumberMaleConfirmed(aEvent.getNumberMaleConfirmed());

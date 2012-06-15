@@ -15,16 +15,15 @@ public class EventPersistenceImpl extends Persistence implements
 		Event event = new Event();
 		event.setEventId(Long.valueOf(rs.getString(1)));
 		event.setCreatorId(Long.valueOf(rs.getString(2)));
-		event.setEventUserId(Long.valueOf(rs.getString(3)));
-		event.setDate(sqlDate2GregorianCalendar(rs.getDate(4)));
-		event.setEventname(rs.getString(5));
-		event.setOccasion(rs.getString(6));
-		event.setLocation(rs.getString(7));
-		event.setLonRad(rs.getDouble(8));
-		event.setLatRad(rs.getDouble(9));
-		event.setDescription(rs.getString(10));
-		event.setNumberMaleConfirmed(rs.getInt(11));
-		event.setNumberFemaleConfirmed(rs.getInt(12));
+		event.setDate(sqlDate2GregorianCalendar(rs.getDate(3)));
+		event.setEventname(rs.getString(4));
+		event.setOccasion(rs.getString(5));
+		event.setLocation(rs.getString(6));
+		event.setLonRad(rs.getDouble(7));
+		event.setLatRad(rs.getDouble(8));
+		event.setDescription(rs.getString(9));
+		event.setNumberMaleConfirmed(rs.getInt(10));
+		event.setNumberFemaleConfirmed(rs.getInt(11));
 
 		return event;
 	}
@@ -32,7 +31,7 @@ public class EventPersistenceImpl extends Persistence implements
 	@Override
 	public Event read(final long aEventId) {
 		Event event = null;
-		String selectSQL = "select eventId, creatorId, eventuserid, date, eventname, occasion, location, lonrad, latrad, description, numberMaleConfirmed, numberFemaleConfirmed from public.Event where eventId = ?";
+		String selectSQL = "select eventId, creatorId, eventuserid, date, eventname, occasion, location, lon, lat, description, numberMaleConfirmed, numberFemaleConfirmed from public.Event where eventId = ?";
 		try {
 			dbConnection = getDBConnection();
 			preparedStatement = dbConnection.prepareStatement(selectSQL);
@@ -65,24 +64,23 @@ public class EventPersistenceImpl extends Persistence implements
 	private void mapEvent2Table(Event aEvent) throws SQLException {
 		preparedStatement.setInt(1, (int) aEvent.getEventId());
 		preparedStatement.setInt(2, (int) aEvent.getCreatorId());
-		preparedStatement.setInt(3, (int) aEvent.getEventUserId());
-		preparedStatement.setDate(4, utilDate2sqlDate(aEvent.getDate()
+		preparedStatement.setDate(3, utilDate2sqlDate(aEvent.getDate()
 				.getTime()));
-		preparedStatement.setString(5, aEvent.getEventname());
-		preparedStatement.setString(6, aEvent.getOccasion());
-		preparedStatement.setString(7, aEvent.getLocation());
-		preparedStatement.setDouble(8, aEvent.getLonRad());
-		preparedStatement.setDouble(9, aEvent.getLatRad());		
-		preparedStatement.setString(10, aEvent.getDescription());
-		preparedStatement.setInt(11, aEvent.getNumberMaleConfirmed());
-		preparedStatement.setInt(12, aEvent.getNumberFemaleConfirmed());
+		preparedStatement.setString(4, aEvent.getEventname());
+		preparedStatement.setString(5, aEvent.getOccasion());
+		preparedStatement.setString(6, aEvent.getLocation());
+		preparedStatement.setDouble(7, aEvent.getLon());
+		preparedStatement.setDouble(8, aEvent.getLat());		
+		preparedStatement.setString(9, aEvent.getDescription());
+		preparedStatement.setInt(10, aEvent.getNumberMaleConfirmed());
+		preparedStatement.setInt(11, aEvent.getNumberFemaleConfirmed());
 	}
 
 	@Override
 	public void update(final Event aEvent) {
 		String insertTableSQL = "Insert into public.Event"
-				+ "(eventId, creatorId, eventuserid, date, eventname, occasion, location, lonrad, latrad, description, numberMaleConfirmed, numberFemaleConfirmed)"
-				+ "values (?,?,?,?,?,?,?,?,?,?,?,?)";
+				+ "(eventId, creatorId, date, eventname, occasion, location, lon, lat, description, numberMaleConfirmed, numberFemaleConfirmed)"
+				+ "values (?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			dbConnection = getDBConnection();
 			preparedStatement = dbConnection.prepareStatement(insertTableSQL);

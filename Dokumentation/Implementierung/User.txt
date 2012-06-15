@@ -4,14 +4,13 @@
 
 CREATE TABLE "user"
 (
-  userid bigint NOT NULL,
+  userid bigint,
   name text,
   email text,
   gender text,
   birthday date,
   password text,
-  image text,
-  CONSTRAINT userid PRIMARY KEY (userid )
+  image text
 )
 WITH (
   OIDS=FALSE

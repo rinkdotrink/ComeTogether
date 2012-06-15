@@ -6,16 +6,15 @@ CREATE TABLE event
 (
   eventid bigint NOT NULL,
   creatorid bigint,
-  eventuserid bigint,
   date date,
   eventname text,
   occasion text,
   location text,
-  gps character varying[],
+  lon double precision,
+  lat double precision,
   description text,
-  numbermaleconfirmed bigint,
-  numberfemaleconfirmed bigint,
-  CONSTRAINT eventid PRIMARY KEY (eventid )
+  numbermaleconfirmed int,
+  numberfemaleconfirmed int
 )
 WITH (
   OIDS=FALSE

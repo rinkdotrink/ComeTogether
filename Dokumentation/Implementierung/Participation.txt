@@ -4,10 +4,9 @@
 
 CREATE TABLE participation
 (
-  participationid bigint NOT NULL,
+  participationid bigint,
   userid bigint,
-  eventid bigint,
-  CONSTRAINT participationid PRIMARY KEY (participationid )
+  eventid bigint
 )
 WITH (
   OIDS=FALSE

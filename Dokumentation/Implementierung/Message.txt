@@ -4,13 +4,12 @@
 
 CREATE TABLE message
 (
-  messageid bigint NOT NULL,
+  messageid bigint,
   eventid bigint,
   senderid bigint,
   recipientid bigint,
   textmessage text,
-  date date,
-  CONSTRAINT messageid PRIMARY KEY (messageid )
+  date date
 )
 WITH (
   OIDS=FALSE
