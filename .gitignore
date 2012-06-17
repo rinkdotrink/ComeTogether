@@ -1,15 +1,8 @@
 *.swp
 *.class
-*.classpath
-*.project
-.project
-.classpath
-*.prefs
 /logs
 /target
 */target
-.settings
-*/.settings
 *.aux
 *.bbl
 *.blg
