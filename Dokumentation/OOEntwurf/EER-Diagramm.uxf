@@ -13,7 +13,6 @@
 --
 _eventId_
 creatorId
-eventuserId
 date
 eventname
 occasion
