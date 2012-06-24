@@ -31,7 +31,7 @@ public class EventPersistenceImpl extends Persistence implements
 	@Override
 	public Event read(final long aEventId) {
 		Event event = null;
-		String selectSQL = "select eventId, creatorId, eventuserid, date, eventname, occasion, location, lon, lat, description, numberMaleConfirmed, numberFemaleConfirmed from public.Event where eventId = ?";
+		String selectSQL = "select eventId, creatorId, date, eventname, occasion, location, lon, lat, description, numberMaleConfirmed, numberFemaleConfirmed from public.Event where eventId = ?";
 		try {
 			dbConnection = getDBConnection();
 			preparedStatement = dbConnection.prepareStatement(selectSQL);
