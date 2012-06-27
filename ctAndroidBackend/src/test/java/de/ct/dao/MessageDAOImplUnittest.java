@@ -44,7 +44,7 @@ public class MessageDAOImplUnittest {
 		Message message = new Message();
 		message.setMessageId(0);
 		Message m = classUnderTest.create();
-		assertEquals(message, m);
+		assertEquals(message.getMessageId(), m.getMessageId());
 	}
 
 	@Test

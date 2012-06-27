@@ -52,17 +52,29 @@ public class UserDAOImplUnittest {
 	public void testRead() {
 		User user = new User();
 		user.setUserId(0);
-		EasyMock.expect(classUnderTest.read(0)).andReturn(user).times(1);
+		EasyMock.expect(mock.read(0)).andReturn(user).times(1);
 		EasyMock.replay(mock);
 		User u2 = classUnderTest.read(0);
 		assertEquals(user, u2);
 		verify(mock);
 	}
+	
+	@Test
+	public void testRead2() {
+		User user = new User();
+		user.setName("Koerner");
+		user.setPassword("secret");
+		EasyMock.expect(mock.read("Koerner")).andReturn(user).times(1);
+		EasyMock.replay(mock);
+		User u2 = classUnderTest.read("Koerner");
+		assertEquals(user, u2);
+		verify(mock);		
+	}
 
 	@Test
 	public void testUpdate() {
 		User user = new User();
-		EasyMock.expect(classUnderTest.update(user)).times(1);
+		EasyMock.expect(mock.update(user)).andReturn(user).times(1);
 		EasyMock.replay(mock);
 		User u2 = classUnderTest.update(user);
 		assertEquals(user, u2);

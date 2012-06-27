@@ -9,4 +9,5 @@ public class UserReader extends Reader {
 		User user = (User) getProduct(aId, new User());
 		return user;
 	}
+	
 }

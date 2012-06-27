@@ -12,7 +12,7 @@ public class Message implements Product, Serializable {
 	private long eventId;
 	private long senderId;
 	private long recipientId;
-	private String textmessage;
+	private String textmessage = "";
 	private Calendar date = new GregorianCalendar(1900, 0, 1);
 
 	public Message(final long aMessageId, final long aEventId,

@@ -34,7 +34,7 @@ public class Participation implements Product {
 	}
 
 	public int hashCode() {
-		return (int) this.eventId % 1000;
+		return (int) this.participationId % 1000;
 	}
 
 	public long getEventId() {

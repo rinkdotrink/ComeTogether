@@ -7,6 +7,8 @@ public interface UserDAO {
 	public User create();
 
 	public User read(final long aUserId);
+	
+	public User read(final String aUsername);
 
 	public User update(final User aUser);
 

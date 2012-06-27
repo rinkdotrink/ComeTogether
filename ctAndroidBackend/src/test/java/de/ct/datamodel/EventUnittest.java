@@ -119,14 +119,14 @@ public class EventUnittest {
 	public void testGetLatRad() {
 		double latrad = 2;
 		event.setLonRad(latrad);
-		assertEquals(latrad, event.getLat(),0.1);
+		assertEquals(latrad, event.getLat(),2);
 	}
 
 	@Test
 	public void testSetLatRad() {
 		double latrad = 2;
 		event.setLonRad(latrad);
-		assertEquals(latrad, event.getLat(),0.1);
+		assertEquals(latrad, event.getLat(),2);
 	}
 	
 

@@ -28,11 +28,19 @@ public class RESTServiceActivity extends FragmentActivity {
 	private static void performUser() {
 		UserClient userClient = new UserClient();
 		User user = new User();
+		user.setName("Koerner");
+		user.setPassword("secret");
 		User user3 = userClient.createUser(user);
 		Log.d("RESTServiceActivity", "User erstellt mit id: " + user3);
 		User user2 = userClient.readUser(user3.getUserId());
 		Log.d("RESTServiceActivity",
 				"User gelesen mit id: " + user2.getUserId());
+		
+		
+		User user4 = userClient.login(user);
+		Log.d("RESTServiceActivity",
+				"User login mit name: " + user4.getName());
+		
 		userClient.deleteUser(user3.getUserId());
 	}
 

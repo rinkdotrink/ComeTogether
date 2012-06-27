@@ -43,7 +43,7 @@ public class UserPersistenceImpl extends Persistence implements UserPersistence 
 	}
 
 	@Override
-	public void update(final User aUser) {
+	public User update(final User aUser) {
 		String insertTableSQL = "Insert into public.User"
 				+ "(userId, name, email, gender, birthday, password, image)"
 				+ "values (?,?,?,?,?,?,?)";
@@ -70,6 +70,7 @@ public class UserPersistenceImpl extends Persistence implements UserPersistence 
 				}
 			}
 		}
+		return aUser;
 	}
 
 	@Override
@@ -134,6 +135,39 @@ public class UserPersistenceImpl extends Persistence implements UserPersistence 
 		long utilDateAsLong = date.getTime();
 		java.sql.Date sqlDate = new java.sql.Date(utilDateAsLong);
 		return sqlDate;
+	}
+
+	@Override
+	public User read(String aUsername) {
+		User user = null;
+		String selectSQL = "select userId, name, email, gender, password, birthday, image from public.User where name = ?";
+		try {
+			dbConnection = getDBConnection();
+			preparedStatement = dbConnection.prepareStatement(selectSQL);
+			preparedStatement.setString(1, aUsername);
+			ResultSet rs = preparedStatement.executeQuery();
+			if (rs.next()) {
+				user = mapTable2User(rs);
+			}
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+			if (preparedStatement != null) {
+				try {
+					preparedStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return user;
 	}
 
 }

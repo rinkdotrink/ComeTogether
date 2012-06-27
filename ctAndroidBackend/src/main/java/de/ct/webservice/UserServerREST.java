@@ -9,6 +9,8 @@ public interface UserServerREST {
 	
 	public User User2(String aUserId);
 	
+	public User User3(String aUserStr);
+	
 	public String deleteUser(String aUserId);
 
 }

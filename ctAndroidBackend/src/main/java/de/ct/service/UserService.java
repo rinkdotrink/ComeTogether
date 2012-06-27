@@ -9,6 +9,8 @@ public interface UserService {
 	public void deleteUser(final long aUserId);
 
 	public User findUserById(final long aUserId);
+	
+	public User findUserByName(final String aUsername);
 
 //	public List<User> getUsers();
 

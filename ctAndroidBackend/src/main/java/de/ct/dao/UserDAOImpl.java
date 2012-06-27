@@ -34,11 +34,18 @@ public class UserDAOImpl implements UserDAO {
 		User user = db.read(aUserId);
 		return user;
 	}
+	
+	@Override
+	public User read(final String aUsername) {
+		User user = db.read(aUsername);
+		return user;
+	}
+
 
 	@Override
 	public User update(final User aUser) {
-		db.update(aUser);
-		return aUser;
+		User user = db.update(aUser);
+		return user;
 	}
 
 	@Override

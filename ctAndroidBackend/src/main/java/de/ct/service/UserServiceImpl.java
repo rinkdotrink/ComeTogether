@@ -30,6 +30,12 @@ public class UserServiceImpl implements UserService {
 	public User findUserById(final long aUserId) {
 		return userDAO.read(aUserId);
 	}
+	
+	@Override
+	public User findUserByName(String aUsername) {
+		return userDAO.read(aUsername);
+	}
+	
 
 //	@Override
 //	public List<User> getUsers() {

@@ -52,6 +52,22 @@ public class UserServerRESTImpl implements UserServerREST {
 		User user = userService.findUserById(userId);		
 		return user;
 	}
+	
+
+	@POST
+	@Path("/login")
+	@Consumes("text/plain")
+	@Produces("application/json")	
+	public User User3(String aUserStr) {
+		Marshaller marshaller = new Marshaller();
+		User user = (User) marshaller.unmarshall(aUserStr, new User());
+		User user2 = userService.findUserByName(user.getName());
+		User userReturn = null;
+		if(user2.getPassword().equalsIgnoreCase(user.getPassword())) {
+			userReturn = user;
+		}
+		return userReturn;
+	}
 
 
 	@POST
@@ -64,6 +80,7 @@ public class UserServerRESTImpl implements UserServerREST {
 		String result = "User deleted: " + userId;
 		return result;
 	}
+
 
 	// @GET
 	// @Produces("text/xml")

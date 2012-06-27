@@ -43,7 +43,7 @@ public class UserServiceImplUnittest {
 	public void testCreateNewUser() {
 		User user = new User();
 		user.setUserId(0);		
-		EasyMock.expect(classUnderTest.createNewUser()).andReturn(user).times(1);
+		EasyMock.expect(mock.create()).andReturn(user).times(1);
 		EasyMock.replay(mock);
 		User u = classUnderTest.createNewUser();
 		assertEquals(user, u);
@@ -62,7 +62,7 @@ public class UserServiceImplUnittest {
 	}
 
 	@Test
-	public void testFindEventById() {
+	public void testUserById() {
 		User user = new User();
 		user.setUserId(0);
 		EasyMock.expect(mock.read(0)).andReturn(user).times(1);
@@ -71,9 +71,19 @@ public class UserServiceImplUnittest {
 		verify(mock);
 	}
 	
+	@Test
+	public void testUserByName() {
+		User user = new User();
+		user.setName("Koerner");
+		EasyMock.expect(mock.read("Koerner")).andReturn(user).times(1);
+		EasyMock.replay(mock);		
+		classUnderTest.findUserByName("Koerner");		
+		verify(mock);
+	}
+	
 	
 	@Test
-	public void testSaveEvent() {
+	public void testSaveUser() {
 		User user = new User();
 		user.setUserId(0);
 		EasyMock.expect(mock.update(user)).andReturn(user).times(1);
@@ -81,6 +91,15 @@ public class UserServiceImplUnittest {
 		User u2 = classUnderTest.saveUser(user);		
 		verify(mock);
 		assertEquals(user, u2);
+	}
+	
+	@Test
+	public void testLogin() {
+		User user = new User();
+		user.setName("Koerner");
+		user.setPassword("secret");
+		
+		
 	}
 
 }

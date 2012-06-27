@@ -6,7 +6,9 @@ public interface UserPersistence {
 
 	public User read(final long aUserId);
 	
-	public void update(final User aUser);
+	public User read(final String aUsername);
+	
+	public User update(final User aUser);
 
 	public void delete(final User aUser);
 
