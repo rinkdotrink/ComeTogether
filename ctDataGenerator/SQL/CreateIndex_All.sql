@@ -13,7 +13,6 @@ CREATE INDEX event_lon ON public.event(lon);
 CREATE INDEX event_lat ON public.event(lat);
 CREATE INDEX event_numbermaleconfirmed ON public.event(numbermaleconfirmed);
 CREATE INDEX event_numberfemaleconfirmed ON public.event(numberfemaleconfirmed);
-CREATE INDEX event_numberfemaleconfirmed ON public.event(numberfemaleconfirmed);
 
 CREATE INDEX message_textmessage ON public.message(textmessage);
 CREATE INDEX message_date ON public.message(date);
