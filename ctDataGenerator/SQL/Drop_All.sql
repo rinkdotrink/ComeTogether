@@ -1,4 +1,6 @@
-﻿Drop table public.Event;
-Drop table public.Participation;
-Drop table public.Message;
-Drop table public.User;
+﻿Drop table public.User CASCADE;
+Drop table public.Event CASCADE;
+Drop table public.Message CASCADE;
+Drop table public.Participation CASCADE;
+
+
