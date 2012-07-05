@@ -1,0 +1,10 @@
+﻿CREATE INDEX user_userid ON public.user(userid);
+CREATE INDEX event_eventid ON public.event(eventid);
+CREATE INDEX event_creatorid ON public.event(creatorid);
+CREATE INDEX message_messageid ON public.message(messageid);
+CREATE INDEX message_eventid ON public.message(eventid);
+CREATE INDEX message_senderid ON public.message(senderid);
+CREATE INDEX message_recipientid ON public.message(recipientid);
+CREATE INDEX participation_participationid ON public.participation(participationid);
+CREATE INDEX participation_userid ON public.participation(userid);
+CREATE INDEX participation_eventid ON public.participation(eventid);

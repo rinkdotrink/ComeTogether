@@ -24,7 +24,7 @@ public abstract class Writer implements IWriter {
 
 	public abstract void write(Product aProduct);
 
-	public void initWriter(String filePath) {
+	protected void initWriter(String filePath) {
 		file = Paths.get(filePath);
 		charset = Charset.forName("UTF-8");
 		df = new SimpleDateFormat("yyyy-MM-dd");
@@ -33,7 +33,7 @@ public abstract class Writer implements IWriter {
 					new OpenOption[] { StandardOpenOption.CREATE });
 		} catch (IOException e) {
 			LogUtil.getLogger().error(e);
-		}
+		}		
 	}
 
 	public void close() {

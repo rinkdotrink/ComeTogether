@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="11.3">
+<diagram program="umlet" version="11.5.1">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.custom.Component</type>
@@ -11,7 +11,7 @@
     </coordinates>
     <panel_attributes> 
 'Component
- DBWriter</panel_attributes>
+ Writer</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -60,7 +60,7 @@
       <w>680</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>/DBWriter/
+    <panel_attributes>/Writer/
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -72,7 +72,7 @@
       <w>130</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>DBKundeWriter
+    <panel_attributes>UserWriter
 --
 </panel_attributes>
     <additional_attributes/>
@@ -85,7 +85,7 @@
       <w>140</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>DBProduktWriter
+    <panel_attributes>EventWriter
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -97,7 +97,7 @@
       <w>140</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>DBWarenkorbWriter
+    <panel_attributes>MessageWriter
 --
 </panel_attributes>
     <additional_attributes/>
@@ -110,7 +110,7 @@
       <w>170</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>DBWKorbProduktWriter
+    <panel_attributes>ParticipationWriter
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -161,14 +161,14 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>430</x>
+      <x>450</x>
       <y>240</y>
-      <w>194</w>
+      <w>154</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;[^]-(()-[v]&gt;
-Verbindung schließen</panel_attributes>
-    <additional_attributes>100;120;100;30</additional_attributes>
+Datei schließen</panel_attributes>
+    <additional_attributes>80;120;80;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -178,7 +178,7 @@ Verbindung schließen</panel_attributes>
       <w>130</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>KundenGenerator
+    <panel_attributes>UserGenerator
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -190,7 +190,7 @@ Verbindung schließen</panel_attributes>
       <w>120</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>ProduktGenerator
+    <panel_attributes>EventGenerator
 --
 </panel_attributes>
     <additional_attributes/>
@@ -198,12 +198,12 @@ Verbindung schließen</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>400</x>
+      <x>390</x>
       <y>550</y>
-      <w>120</w>
+      <w>140</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>WKorbGenerator
+    <panel_attributes>MessageGenerator
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -215,7 +215,7 @@ Verbindung schließen</panel_attributes>
       <w>160</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>WKorbProduktGenerator
+    <panel_attributes>ParticipationGenerator
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -281,48 +281,48 @@ Verbindung schließen</panel_attributes>
     <coordinates>
       <x>0</x>
       <y>590</y>
-      <w>154</w>
+      <w>144</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;[v]-(()-[^]&gt;
-Kunde erstellen</panel_attributes>
+User erstellen</panel_attributes>
     <additional_attributes>80;30;80;140</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>140</x>
+      <x>150</x>
       <y>590</y>
-      <w>162</w>
+      <w>150</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;[v]-(()-[^]&gt;
-Produkt erstellen</panel_attributes>
+Event erstellen</panel_attributes>
+    <additional_attributes>80;30;80;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>290</x>
+      <y>590</y>
+      <w>170</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;[v]-(()-[^]&gt;
+Message erstellen</panel_attributes>
     <additional_attributes>90;30;90;140</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>300</x>
+      <x>440</x>
       <y>590</y>
-      <w>158</w>
+      <w>190</w>
       <h>160</h>
     </coordinates>
     <panel_attributes>lt=&lt;[v]-(()-[^]&gt;
-WKorb erstellen</panel_attributes>
-    <additional_attributes>80;30;80;140</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>420</x>
-      <y>590</y>
-      <w>232</w>
-      <h>160</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;[v]-(()-[^]&gt;
-Produkte in WKorb erstellen</panel_attributes>
-    <additional_attributes>120;30;120;140</additional_attributes>
+Participation erstellen</panel_attributes>
+    <additional_attributes>100;30;100;140</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
@@ -456,7 +456,7 @@ r1=Testdaten generieren</panel_attributes>
       <w>80</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>Warenkorb
+    <panel_attributes>User
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -468,7 +468,7 @@ r1=Testdaten generieren</panel_attributes>
       <w>100</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>Produkt
+    <panel_attributes>Event
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -480,7 +480,7 @@ r1=Testdaten generieren</panel_attributes>
       <w>120</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>Kunde
+    <panel_attributes>Message
 --</panel_attributes>
     <additional_attributes/>
   </element>
@@ -492,7 +492,7 @@ r1=Testdaten generieren</panel_attributes>
       <w>140</w>
       <h>60</h>
     </coordinates>
-    <panel_attributes>WKorbProdukt
+    <panel_attributes>Participation
 --</panel_attributes>
     <additional_attributes/>
   </element>
