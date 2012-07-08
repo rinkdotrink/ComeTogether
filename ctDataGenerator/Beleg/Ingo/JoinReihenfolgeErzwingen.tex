@@ -1,0 +1,22 @@
+\section{Reihenfolge von Joins erzwingen}\label{ReihenfolgeVonJoinsErzwingen}
+Um den Planner zu der angegebenen Join-Reihenfolge zu zwingen, kann das
+
+$join\_collapse\_limit$\footnote{http://www.postgresql.org/docs/current/interactive/explicit-joins.html} auf 1 gesetzt werden.
+
+Um den Planner zu zwingen, Subqueries nicht in einen JOIN umzuandeln, kann das $from\_collapse\_limit$ auf 1 gesetzt werden.
+
+Der Standardwert für $join\_collapse\_limit$ und $from\_collapse\_limit$ ist acht. Bei z.B. zwölf zu verknüpfenden Tabellen wird keine vollständige Suche mehr nach der besten Joinreihenfolge ausgeführt, sondern eine wahrscheinlichkeitstheoretische genetische Suche die nur noch eine begrenzte Zahl von möglichen Joinreihenfolgen betrachtet. Die genetische Suche braucht weniger Zeit als die vollständige Suche, findet aber nicht zwangsläufig die bestmögliche Joinreihenfolge.
+Ab welchem Schwellwert die genetische Suche aktiv wird, kann bei $geqo\_threshold$ gesetzt werden. Der Standardwert ist zwölf.
+
+Auch wenn $join\_collapse\_limit$ auf den Wert eins gesetzt wird, wird bei folgendem Select die JOIN-Reihenfolge vom Planer bestimmt:
+
+\begin{lstlisting}[caption=Reihenfolge vom Planer bestimmt, firstnumber=1, label=PlanerBestimmt]{code:PlanerBestimmt}
+SELECT * FROM a, b, c WHERE a.id = b.id AND b.ref = c.id;
+\end{lstlisting}
+
+Erst wenn zwei Tabellen ausdrücklich mit dem Wort JOIN verknüpft werden, zwingt das den Planner, diese zwei Tabellen in der gegebenen Reihenfolge zu verknüpfen:
+
+\begin{lstlisting}[caption=Reihenfolge vom Entwickler bestimmt, firstnumber=1, label=EntwicklerBestimmt]{code:EntwicklerBestimmt}
+SELECT * FROM a CROSS JOIN b CROSS JOIN c WHERE a.id = b.id AND b.ref = c.id;
+SELECT * FROM a JOIN (b JOIN c ON (b.ref = c.id)) ON (a.id = b.id);
+\end{lstlisting}

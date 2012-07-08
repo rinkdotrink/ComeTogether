@@ -1,0 +1,32 @@
+\section{Was ist ein Hints-System?}\label{WasIstEinHintsSystem}
+In anderen DBMS wie DB2 oder Oracle kann der Optimizer durch Hinweise (hints) dazu gebracht werden, seinen Ausführungsplan zu verändern.
+
+Der Query in Listing \ref{STRAIGHTJOIN} auf Seite \pageref{STRAIGHTJOIN} gibt in MySQL dem Optimizer den Hinweis, die Tabellen so miteinander zu verknüpfen, wie sie definiert wurden: Es wird tabA als treibende Tabelle und tabB als innere Tabelle verwendet.
+
+\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=STRAIGHTJOIN]{code:STRAIGHTJOIN}
+SELECT STRAIGHT_JOIN *
+FROM tabA a, tabB b
+WHERE a.id = b.id;
+\end{lstlisting}
+
+Wenn MySQL den falschen Index aus einer Menge von möglichen Indexen nimmt, kann z.B. wie in Listing \ref{USEINDEX} dem Optimizer der Hinweis gegeben werden, nur die im folgenden angegebenden Indexe für die Abfrage zu verwenden.
+
+\begin{lstlisting}[caption=USE INDEX, firstnumber=1, label=USEINDEX]{code:USEINDEX}
+SELECT * FROM table1 USE INDEX (col1_index,col2_index)
+  WHERE col1=1 AND col2=2 AND col3=3;
+\end{lstlisting}
+
+Mit dem Hinweis IGNORE INDEX $(col2\_index)$ in Listing \ref{IGNOREINDEX} wird der Optimizer veranlasst, den Index $col3\_index$ für die Abfrage nicht zu verwenden.
+
+\begin{lstlisting}[caption=IGNORE INDEX, firstnumber=1, label=IGNOREINDEX]{code:IGNOREINDEX}
+SELECT * FROM table1 IGNORE INDEX (col3_index)
+  WHERE col1=1 AND col2=2 AND col3=3;
+\end{lstlisting}
+
+In PostgreSQL gibt es kein hints-System\footnote{http://wiki.postgresql.org/wiki/OptimizerHintsDiscussion}. Es sind in einem Query keine Konstrukte vorgesehen, dem Planner Hinweise zu geben, wie er den Ausführungsplan erstellen soll.
+
+Überholte Hints - wenn z.B. der Hint für die aktuelle Tabellengrößen ungeeignet ist - oder die fehlerhafte Anwendung von Hints - können zu suboptimalen Ausführungsplänen führen und somit die Ausführungsgeschwindigkeit negativ beeinflussen. Die Fehlerquelle "`menschliches Versagen"' beim Schreiben von Hints wird durch den Verzicht auf ein Hints-System reduziert.
+
+Ohne ein Hints-System wird es allerdings auch schwieriger den Planer verschiedene Ausführungspläne erzeugen zu lassen. Und der Planer ist mehr auf sich allein gestellt, der er keine Hilfe von menschlicher Seite in Form von Hints erwarten kann.
+
+Auch wenn der Schreiber des Queries sich auf den Planer verlassen muss, sollte er trotzdem ein paar Dinge beachten, auf die im Folgenden eingegangen wird.

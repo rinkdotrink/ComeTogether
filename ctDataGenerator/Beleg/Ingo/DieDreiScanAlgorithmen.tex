@@ -1,0 +1,13 @@
+\section{Die drei Scan-Algorithmen}\label{DieDreiScanAlgorithmen}
+Ein Scan-Algorithmus arbeitet immer nur auf einer einzelnen Tabelle. In Postgre\-SQL gibt es die folgenden drei Scan-Algorithmen:
+
+\begin{enumerate}
+\item sequential scan (full table scan) \\
+Der Inhalt der Tabelle wird komplett gelesen. Er wird blockweise vom Sekundärspeicher wie z.B. einer Festplatte in den Arbeitsspeicher geholt.
+
+\item index scan \\
+Hat eine Tabelle einen Index, kann er verwendet werden, um die Tupel sortiert zu lesen. Bei einem Index Scan werden Blöcke auch mehrmals gelesen, wenn der Inhalt der Tabelle nicht auch sortiert in den Blöcken vorliegt. Das ist relativ teuer und nur für kleine Treffermengen geeignet. Ein Index-Scan eignet sich bei einer hohen Selektivität eines Selects.
+
+\item bitmap index scan \\
+Hier wird der Index gescannt und ein Bitmap mit den getroffenen Blocknummern erzeugt. Das Bitmap der Blocknummern wird dann aufsteigend sortiert. Die Tabelle wird anhand der sortierten Bitmap-Blocknummern aufsteigend gescannt. Das ist nur möglich, wenn Indexe für die betreffenden Spalten existieren.
+\end{enumerate}

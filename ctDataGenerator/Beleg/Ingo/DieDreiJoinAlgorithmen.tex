@@ -1,0 +1,29 @@
+\section{Die drei Join-Algorithmen}\label{DieDreiJoinAlgorithmen}
+In den Knoten des Ausführungsplanes stehen Datenbankoperatoren wie Projek\-tion, Selektion, Kreuzprodukt, Vereinigung, Differenz oder Umbenennung.
+
+Die Hintereinanderausführung der Operationen kartesisches Produkt und Selektion wird Join genannt. Joins werden im DBMS intern über Join-Algorithmen realisiert. Join-Algorithmen verknüpfen Tabellen paarweise miteinander.
+
+In PostgreSQL gibt es drei grundlegende JOIN-Algorithmen:
+
+\begin{enumerate}
+\item nested loop join \\
+Für jede Zeile aus der treibenden Tabelle wird die innere Tabelle einmal durchlaufen. Wenn die innere Tabelle indiziert ist, kann sie mit einem Index-Scan durchlaufen werden.
+Ein Nested Loop Join kann sehr kostenintensiv werden, wenn er die innere Tabelle mehrmals lesen muss.
+Wenn auf der inneren Tabelle ein Index-Scan erfolgen kann, oder die innere Tabelle sehr klein ist, kann sich diese durch vorherige Anfragen im Cache befinden und so schnell abgearbeitet werden.
+Wenn es sich um einen sequentiellen Scan handelt, der alle Zeilen vergleicht, dann muss die innere Tabelle u.U. so oft von der Festplatte gelesen werden, wie die treibende Tabelle Zeilen hat.
+Wird nur die erste übereinstimmende Zeile gesucht, ist der Nested Loop Join schneller als andere Joins, die vorher erst ihr komplettes Ergebnis berechnen müssen, bevor sie den ersten Treffer zurückgeben können.
+Der Nested Loop Join verlangt vor dem Query keinerlei Investition, wie Hashing oder Sortierung.
+
+\item hash join \\
+Für einen Hashjoin müssen beide Tabellen als Hash-Tabelle vorliegen. Das setzt vorraus, dass bevor ein Hash Join eingesetzt werden kann, die Tabellen durchgehasht wurden, d.h. ein Hashwert für das spätere Join-Attribut gebildet wird. Wie der Nested Loop Join ist der Hash-Join besonders performant, wenn der Größenunterschied zwischen treibender Tabelle und innerer Tabelle groß ist und die kleinere Tabelle komplett in den Speicher passt. Dazu wird bei der Ausführung des Hash-Joins die kleinere Hashtabelle in den Arbeitsspeicher geladen, mit dem JOIN-Attribut als Schlüssel. Dann wird die größere Tabelle gescannt und jeder gefundene Wert wird als Schlüssel für die kleinere Hashtable benutzt.
+Ein Hash-Join kann nur dann verwendet werden, wenn die Spalten mit dem = Operator verglichen werden.
+Der Performancezugewinn des Hash-Join wird durch einen höheren Sekundärspeicherbedarf erkauft, denn die Hashtabellen werden im Tempspace materialisiert. Bei einem Hash Join muss immer ein Materialize erfolgen, der die Buckets erzeugt.
+Der Hash-Join eignet sich auch dann, wenn alle Lösungen gebraucht werden und nicht nur z.B. die ersten zehn.
+
+\item merge join \\
+Bevor ein Merge Join ausgeführt werden kann, müssen beide Tabellen nach dem Join-Attributen sortiert werden. Liegen beide Tabellen sortiert vor, werden bei einem Merge Join beide Tabellen parallel gescannt und passende Zeilen werden zusammengefügt. Sowohl die treibende als auch die innere Tabelle muss nur einmal gescannt werden. Die vorrangegangene Sortierung erfolgt in einem extra Sortierschritt oder durch die Verwendung eines Index, falls das Feld indiziert ist und der JOIN über dieses Attribut erfolgt.
+Die Sortierung im ersten Fall ist teurer als wenn ein entsprechender Index vorhanden ist.
+Werden mehrere Merge-JOINS über dasselbe Attribut hintereinander ausgeführt, muss nur einmal sortiert werden.
+Wie bei dem Hash-Join wird der Performancezugewinn des Merge Joins mit einem höheren Sekundärspeicherbedarf erkauft, denn beide Tabellen müssen sortiert im Tempspace vorliegen. Der Merge Join ist wie der Hash-Join vor allem dann interessant, wenn alle Lösungen gefunden werden sollen.
+Anders als bei Nested Loop Join und Hash-Join spielt bei einem Merge Join der Größenunterschied der beiden zu joinenden Tabellen für die Ausführungsgeschwindigkeit keine Rolle.
+\end{enumerate}

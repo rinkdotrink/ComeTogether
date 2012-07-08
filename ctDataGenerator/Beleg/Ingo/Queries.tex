@@ -1,0 +1,51 @@
+\section{Datenbankabfragen}\label{Datenbankabfragen}
+
+Query 1: Alle user anzeigen, die am event mit dem eventnamen "`event1"' teilnehmen.
+
+\begin{lstlisting}[caption=Query 1, firstnumber=1]{code:Query1}
+Select u.userId, u.name, u.email, u.gender, u.birthday
+from public.user u, public.event e, public.participation p
+where e.eventname = 'event1'
+AND e.eventid = p.eventid
+AND p.userid = u.userid;
+\end{lstlisting}
+
+Query 2: Alle weiblichen user anzeigen, die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 stattfindet, und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist.
+
+\begin{lstlisting}[caption=Query 2, firstnumber=1]{code:Query2}
+Select u.userId, u.name, u.email, u.gender, u.birthday
+from public.user u, public.event e, public.participation p
+where u.gender = 'w'
+AND u.birthday between '01.01.1986' AND '31.12.1992'
+AND e.date between '01.01.2013' AND '01.03.2013'
+AND e.eventid = p.eventid
+AND p.userid = u.userid
+AND e.numberMaleConfirmed / e.numberFemaleConfirmed < 0.5;
+\end{lstlisting}
+
+Query 3: Die Anzahl der textmessages gruppiert und absteigend sortiert nach numberFemaleConfirmed, die zwischen dem 01.01.2010 und dem 31.12.2012 geschrieben wurden, in denen das Wort Salsa vorkommt, deren Empfänger männlich sind und zwischen 1972 und 1982 geboren wurden, deren Absender weiblich sind und die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 in einem 100km Radius zu der GPS-Koordinate 11.5833 45.1500 stattfindet und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist. Das Ergebnis soll nur die ersten fünf Treffer liefern.
+
+\begin{lstlisting}[caption=Query 3, firstnumber=1]{code:Query3}
+Select e.numberFemaleConfirmed, Count(m.messageid) as anzahlMessages
+from public.user u, public.event e, public.participation p, public.message m
+where u.gender = 'w'
+AND u.birthday between '01.01.1986' AND '31.12.1992'
+AND e.date between '01.01.2013' AND '01.03.2013'
+AND m.date between '01.01.2010' AND '31.12.2012'
+AND m.textmessage like '%Salsa'
+AND e.eventid = p.eventid
+AND p.userid = u.userid
+AND m.senderId = u.userId
+AND e.numberMaleConfirmed / e.numberFemaleConfirmed < 0.5
+AND DEGREES(acos(cos(RADIANS(90-e.lat))*cos(RADIANS(90-11.5833))+sin(RADIANS(90-e.lat))*
+sin(RADIANS(90-11.5833))*cos(RADIANS(e.lon-45.1500))))/360*40074 < 100
+AND m.recipientId in
+(Select u2.userId
+from public.user u2
+where u2.gender = 'm'
+AND u2.birthday between '01.01.1972' AND '31.12.1982'
+)
+Group by e.numberFemaleConfirmed
+Order by e.numberFemaleConfirmed DESC
+Limit 5
+\end{lstlisting}

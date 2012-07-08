@@ -1,339 +1,113 @@
-\begin{lstlisting}[caption=Testabfrage 1, firstnumber=1]{code:uc1}
-Select adbc.Produkt.Name, Count(*)
-From adbc.Produkt, adbc.Warenkorb_has_Produkt
-where adbc.Produkt.PRODUKT_ID = adbc.Warenkorb_has_Produkt.Produkt_PRODUKT_ID
-Group by adbc.Produkt.Name;
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Testabfrage 2, firstnumber=1]{code:uc2}
-SELECT adbc.kunde.Name, SUM(adbc.produkt.Preis)
-FROM adbc.kunde,adbc.Produkt, adbc.Warenkorb, adbc.Warenkorb_has_Produkt
-WHERE produkt.PRODUKT_ID = warenkorb_has_produkt.Produkt_PRODUKT_ID 
-    AND warenkorb_has_produkt.Warenkorb_WARENKORB_ID = warenkorb.WARENKORB_ID
-    AND warenkorb.Kunde_KUNDE_ID = kunde.KUNDE_ID    
-    AND (warenkorb_has_produkt.Datum BETWEEN '2011-01-01' AND '2011-03-01')
-Group by adbc.kunde.Name;
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Testabfrage 3, firstnumber=1]{code:uc3}
-SELECT Count(DISTINCT(adbc.kunde.KUNDE_ID))
-FROM adbc.Kunde, adbc.Warenkorb, adbc.warenkorb_has_produkt
-WHERE warenkorb.Kunde_KUNDE_ID = kunde.KUNDE_ID
-AND warenkorb.WARENKORB_ID = warenkorb_has_produkt.Warenkorb_WARENKORB_ID
-    AND warenkorb_has_produkt.Datum = '2011-01-01';
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Testabfrage 4, firstnumber=1]{code:uc4}
-SELECT adbc.kunde.Name, SUM(adbc.produkt.Preis)
-FROM adbc.kunde,adbc.Produkt, adbc.Warenkorb, adbc.Warenkorb_has_Produkt
-WHERE produkt.PRODUKT_ID = warenkorb_has_produkt.Produkt_PRODUKT_ID 
-    AND warenkorb_has_produkt.Warenkorb_WARENKORB_ID = warenkorb.WARENKORB_ID
-    AND warenkorb.Kunde_KUNDE_ID = kunde.KUNDE_ID
-    AND ((warenkorb_has_produkt.Datum = '2011-01-01')
-    OR   (warenkorb_has_produkt.Datum = '2011-01-05')
-    OR   (warenkorb_has_produkt.Datum = '2011-01-09')    
-    OR   (warenkorb_has_produkt.Datum = '2011-02-02')
-    OR   (warenkorb_has_produkt.Datum = '2011-02-06')    
-    OR   (warenkorb_has_produkt.Datum = '2011-02-10')
-    OR   (warenkorb_has_produkt.Datum = '2011-03-10')
-    OR   (warenkorb_has_produkt.Datum = '2011-03-14')    
-    OR   (warenkorb_has_produkt.Datum = '2011-03-18'))      
-Group by adbc.kunde.Name;
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Tabellenerzeugung mit Hash-Partitioning, firstnumber=1]{code:createparthash}
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
-
-CREATE SCHEMA IF NOT EXISTS `ADBC` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-
-USE `ADBC`;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Kunde` (
-  `KUNDE_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Kundennummer` VARCHAR(45) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb` (
-  `WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Kunde_KUNDE_ID` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Produkt` (
-  `PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Preis` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb_has_Produkt` (
-  `Warenkorb_WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Produkt_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `WARENKORB_HAS_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Datum` DATE NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
-
-    PARTITION BY HASH( MONTH(Datum) )
-    PARTITIONS 12;
-
-;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Tabellenerzeugung mit List-Partitioning, firstnumber=1]{code:createpartlist}
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
-
-CREATE SCHEMA IF NOT EXISTS `ADBC` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-
-USE `ADBC`;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Kunde` (
-  `KUNDE_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Kundennummer` VARCHAR(45) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb` (
-  `WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Kunde_KUNDE_ID` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Produkt` (
-  `PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Preis` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb_has_Produkt` (
-  `Warenkorb_WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Produkt_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `WARENKORB_HAS_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Datum` DATE NULL DEFAULT NULL )
-    
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
-
-PARTITION BY LIST(MONTH(Datum)) (
-    PARTITION quartal1 VALUES IN (1,2,3),
-    PARTITION quartal2 VALUES IN (4,5,6),
-    PARTITION quartal3 VALUES IN (7,8,9),
-    PARTITION quartal4 VALUES IN (10,11,12)
+\begin{lstlisting}[caption=alle Tabellen erstellen, firstnumber=1]{code:TabellenErstellen}
+CREATE TABLE "user"
+(
+  userid bigint,
+  name text,
+  email text,
+  gender text,
+  birthday date,
+  password text,
+  image text
+)
+WITH (
+  OIDS=FALSE
 );
+ALTER TABLE "user"
+  OWNER TO postgres;
 
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
-\end{lstlisting}
-
-\begin{lstlisting}[caption=Tabellenerzeugung mit Range-Partitioning, firstnumber=1]{code:createpartrange}
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
-
-CREATE SCHEMA IF NOT EXISTS `ADBC` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-
-USE `ADBC`;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Kunde` (
-  `KUNDE_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Kundennummer` VARCHAR(45) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb` (
-  `WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Kunde_KUNDE_ID` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Produkt` (
-  `PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Preis` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb_has_Produkt` (
-  `Warenkorb_WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Produkt_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `WARENKORB_HAS_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Datum` DATE NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
-
-PARTITION BY RANGE COLUMNS(Datum) (
-    PARTITION quartal1 VALUES LESS THAN ('2011-04-01'),
-    PARTITION quartal2 VALUES LESS THAN ('2011-07-01'),
-    PARTITION quartal3 VALUES LESS THAN ('2011-10-01'),
-    PARTITION quartal4 VALUES LESS THAN MAXVALUE
+CREATE TABLE event
+(
+  eventid bigint NOT NULL,
+  creatorid bigint,
+  date date,
+  eventname text,
+  occasion text,
+  location text,
+  lon double precision,
+  lat double precision,
+  description text,
+  numbermaleconfirmed int,
+  numberfemaleconfirmed int
+)
+WITH (
+  OIDS=FALSE
 );
+ALTER TABLE event
+  OWNER TO postgres;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+CREATE TABLE message
+(
+  messageid bigint,
+  eventid bigint,
+  senderid bigint,
+  recipientid bigint,
+  textmessage text,
+  date date
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE message
+  OWNER TO postgres;
+
+CREATE TABLE participation
+(
+  participationid bigint,
+  userid bigint,
+  eventid bigint
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE participation
+  OWNER TO postgres;
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Tabellenerzeugung mit Sub-Partitioning, firstnumber=1]{code:createpartsub}
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
-
-CREATE SCHEMA IF NOT EXISTS `ADBC` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-
-USE `ADBC`;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Kunde` (
-  `KUNDE_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Kundennummer` VARCHAR(45) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb` (
-  `WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Kunde_KUNDE_ID` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Produkt` (
-  `PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Name` VARCHAR(45) NULL DEFAULT NULL ,
-  `Preis` INT(11) NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE  TABLE IF NOT EXISTS `ADBC`.`Warenkorb_has_Produkt` (
-  `Warenkorb_WARENKORB_ID` INT(11) NULL DEFAULT NULL ,
-  `Produkt_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `WARENKORB_HAS_PRODUKT_ID` INT(11) NULL DEFAULT NULL ,
-  `Datum` DATE NULL DEFAULT NULL )
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
-
-    PARTITION BY RANGE COLUMNS(Datum)
-    SUBPARTITION BY HASH( TO_DAYS(Datum) ) (
-        PARTITION quartal1 VALUES LESS THAN ('2011-04-01') (
-            SUBPARTITION s0,
-            SUBPARTITION s1,
-            SUBPARTITION s2,
-            SUBPARTITION s3
-        ),
-        PARTITION quartal2 VALUES LESS THAN ('2011-07-01') (
-            SUBPARTITION s4,
-            SUBPARTITION s5,
-            SUBPARTITION s6,
-            SUBPARTITION s7
-        ),
-        PARTITION quartal3 VALUES LESS THAN ('2011-10-01') (
-            SUBPARTITION s8,
-            SUBPARTITION s9,
-            SUBPARTITION s10,
-            SUBPARTITION s11
-        ),
-        PARTITION quartal4 VALUES LESS THAN MAXVALUE (
-            SUBPARTITION s12,
-            SUBPARTITION s13,
-            SUBPARTITION s14,
-            SUBPARTITION s15
-        )
-    );
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+\begin{lstlisting}[caption=Datenimport über COPY, firstnumber=1]{code:COPY}
+COPY public.Event (eventid, creatorid, date, eventname, occasion, location, lon, lat, description, numbermaleconfirmed, numberfemaleconfirmed) From 'C:\Event.txt' DELIMITER ';';
+COPY public.Message (messageid, eventid, senderid, recipientid, textmessage, date) From 'C:\Message.txt' DELIMITER ';';
+COPY public.Participation (participationid, userid, eventid) From 'C:\Participation.txt' DELIMITER ';';
+COPY public.User (userId, name, email, gender, birthday, password, image) From 'C:\User.txt' DELIMITER ';';
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Indexerstellung als Hash, firstnumber=1]{code:createindexhash}
-CREATE INDEX kunde_idx
-    USING HASH
-    ON adbc.kunde (KUNDE_ID);
-    
-CREATE INDEX produkt_idx
-    USING HASH
-    ON adbc.produkt (PRODUKT_ID);
-    
-CREATE INDEX warenkorb_idx
-    USING HASH
-    ON adbc.warenkorb (WARENKORB_ID);
-    
-CREATE INDEX warenkorb_kunde_idx
-    USING HASH
-    ON adbc.warenkorb (Kunde_KUNDE_ID);
-    
-CREATE INDEX warenkorb_has_produkt_idx
-    USING HASH
-    ON adbc.warenkorb_has_produkt (WARENKORB_HAS_PRODUKT_ID);
-    
-CREATE INDEX warenkorb_has_produkt_Warenkorb_WARENKORB_ID_idx
-    USING HASH
-    ON adbc.warenkorb_has_produkt (Warenkorb_WARENKORB_ID);
 
-CREATE INDEX warenkorb_has_produkt_Produkt_PRODUKT_ID_idx
-    USING HASH
-    ON adbc.warenkorb_has_produkt (Produkt_PRODUKT_ID);
+\begin{lstlisting}[caption=Primär- und Fremdschlüssel hinzufügen, firstnumber=1]{code:PrimaryForeignKeys}
+ALTER TABLE public.event ADD PRIMARY KEY (eventid);
+ALTER TABLE public.message ADD PRIMARY KEY (messageid);
+ALTER TABLE public.participation ADD PRIMARY KEY (participationid);
+ALTER TABLE public.user ADD PRIMARY KEY (userid);
+
+ALTER TABLE event ADD CONSTRAINT event_creatorid FOREIGN KEY (creatorid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_eventid FOREIGN KEY (eventid) REFERENCES event (eventid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_senderid FOREIGN KEY (senderid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_recipientid FOREIGN KEY (recipientid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE participation ADD CONSTRAINT participation_userid FOREIGN KEY (userid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE participation ADD CONSTRAINT participation_eventid FOREIGN KEY (eventid) REFERENCES event (eventid) MATCH FULL;
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Indexerstellung als B-Tree, firstnumber=1]{code:createpartbtree}
-CREATE INDEX kunde_idx
-    USING BTREE
-    ON adbc.kunde (KUNDE_ID);
-    
-CREATE INDEX produkt_idx
-    USING BTREE
-    ON adbc.produkt (PRODUKT_ID);
-    
-CREATE INDEX warenkorb_idx
-    USING BTREE
-    ON adbc.warenkorb (WARENKORB_ID);
-    
-CREATE INDEX warenkorb_kunde_idx
-    USING BTREE
-    ON adbc.warenkorb (Kunde_KUNDE_ID);
-    
-CREATE INDEX warenkorb_has_produkt_idx
-    USING BTREE
-    ON adbc.warenkorb_has_produkt (WARENKORB_HAS_PRODUKT_ID);
-    
-CREATE INDEX warenkorb_has_produkt_Warenkorb_WARENKORB_ID_idx
-    USING BTREE
-    ON adbc.warenkorb_has_produkt (Warenkorb_WARENKORB_ID);
 
-CREATE INDEX warenkorb_has_produkt_Produkt_PRODUKT_ID_idx
-    USING BTREE
-    ON adbc.warenkorb_has_produkt (Produkt_PRODUKT_ID);
+\begin{lstlisting}[caption=Indexe auf Spalten legen, firstnumber=1]{code:Indexe}
+CREATE INDEX event_creatorid ON public.event(creatorid);
+CREATE INDEX message_eventid ON public.message(eventid);
+CREATE INDEX message_senderid ON public.message(senderid);
+CREATE INDEX message_recipientid ON public.message(recipientid);
+CREATE INDEX participation_userid ON public.participation(userid);
+CREATE INDEX participation_eventid ON public.participation(eventid);
+
+CREATE INDEX event_date ON public.event(date);
+CREATE INDEX event_eventname ON public.event(eventname);
+CREATE INDEX event_occasion ON public.event(occasion);
+CREATE INDEX event_location ON public.event(location);
+CREATE INDEX event_lon ON public.event(lon);
+CREATE INDEX event_lat ON public.event(lat);
+CREATE INDEX event_numbermaleconfirmed ON public.event(numbermaleconfirmed);
+CREATE INDEX event_numberfemaleconfirmed ON public.event(numberfemaleconfirmed);
+
+CREATE INDEX message_textmessage ON public.message(textmessage);
+CREATE INDEX message_date ON public.message(date);
+
+CREATE INDEX user_name ON public.user(name);
+CREATE INDEX user_email ON public.user(email);
+CREATE INDEX user_gender ON public.user(gender);
+CREATE INDEX user_birthday ON public.user(birthday);
 \end{lstlisting}
-

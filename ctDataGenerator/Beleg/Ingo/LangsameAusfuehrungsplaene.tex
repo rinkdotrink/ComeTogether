@@ -1,0 +1,36 @@
+\section{Was tun bei langsamen Ausführungsplänen?}\label{WasTunBeiLangsamenAusfuehrungsplaenen}
+
+Dem Planer keine falschen Hinweise geben. Keine Hints verwenden.
+
+Autoanalyze aktivieren.
+Der Planner kann nur dann optimierte Ausführungspläne erzeugen, wenn er genügend Statistiken über die gefüllten Tabellen besitzt. Deswegen müssen regelmäßig Statistiken erstellt werden. In PostgreSQL geht das mit analyze. Analyze sammelt Informationen über den Füllstand der Tabellen, die häufigsten Werte in jeder Spalten und die wahrscheinliche Verteilung der Werte in einer Spalte.
+Mit diesen Statistiken kann dann Planner dann den passenden JOIN-Algorithmus und die passende JOIN-Order wählen.
+Um nach bestimmten Abständen automatisch analyze aufzurufen gibt es autoanalyze.
+
+Autovacuum aktivieren.
+Mit autovacuum = on in der postgresql.conf kann autovacuum aktiviert werden.
+
+Indexe verwenden.
+Es kann z.B. der Entwickler geeignete Indexe anlegen, sodass das DBMS diese verwenden kann, um performantere Ausführungspläne zu erzeugen.
+
+Mehrspaltige Indexe verwenden, wenn dadurch ein performanterer Ausführungs\-plan erzeugt werden kann.
+
+Keine zu intensiven Rechnungen in SQL formulieren.
+
+Partitioning verwenden.
+
+Die Struktur der Tabellen überdenken, wenn mehr als 8 Tabellen miteinander verknüpft werden.
+
+Herausfinden, warum der Planner einen langsamen Plan erzeugt, anstatt durch Planner-Hints der Frage aus dem Weg zu gehen.
+
+Es kann sein, dass jemand ungünstige Werte für die Parameter in der postgresql.conf gesetzt hat.
+
+Bei einem zu kleinen Wert für $join\_collapse\_limit$ in der postgresql.conf, verbunden mit der expliziten Verknüpfung von Tabellen mit dem Wort Join, ist der Planner gezwungen, eine vorgegebene aber ungünstige Join-Reihenfolge zu verwenden.
+
+Um dem Planner nicht ausversehen zu etwas zu zwingen, sollten bei deinem Innerjoin die Tabellen nicht explizit mit dem Wort JOIN verknüpfen werden, sondern es sollten die Tabellen einfach getrennt durch ein Komma angeben werden:
+
+\begin{lstlisting}[caption=Inner-Join, firstnumber=1, label=gtlt]{code:gtlt}
+SELECT * FROM a, b, c WHERE a.id = b.id AND b.ref = c.id;
+\end{lstlisting}
+
+Bei einem zu kleinen Wert für $from\_collapse\_limit$ in der postgresql.conf, verbunden mit vielen Subqueries, kann der Planner die Subqueries nicht auflösen. Dabei sollte der Planner Subqueries zu Joins auflösen, da sonst erst das komplette Ergebnis des Subquerys erstellt werden muss, bevor mit der Tabelle weitergearbeitet werden kann.

@@ -1,0 +1,278 @@
+\section{Ausführungspläne für Queries mit und ohne Index}\label{AusfuehrungsplaeneFuerQueriesMitUndOhneIndex}
+
+Query 1: Alle user anzeigen, die am event mit dem eventnamen "`event1"' teilnehmen.
+
+\begin{lstlisting}[caption=Query 1, firstnumber=1, label=Query1]{code:Query1}
+Select u.userId, u.name, u.email, u.gender, u.birthday
+from public.user u, public.event e, public.participation p
+where e.eventname = 'event1'
+AND e.eventid = p.eventid
+AND p.userid = u.userid;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan Query 1, firstnumber=1, label=aQuery1]{code:aQuery1}
+"Hash Join  (cost=254.19..619.78 rows=3595 width=108)"
+"  Hash Cond: (p.userid = u.userid)"
+"  ->  Hash Join  (cost=231.39..467.41 rows=1498 width=8)"
+"        Hash Cond: (p.eventid = e.eventid)"
+"        ->  Seq Scan on participation p  (cost=0.00..160.64 rows=9664 width=16)"
+"        ->  Hash  (cost=231.00..231.00 rows=31 width=8)"
+"              ->  Seq Scan on event e  (cost=0.00..231.00 rows=31 width=8)"
+"                    Filter: (eventname = 'event1'::text)"
+"  ->  Hash  (cost=16.80..16.80 rows=480 width=108)"
+"        ->  Seq Scan on "user" u  (cost=0.00..16.80 rows=480 width=108)"
+\end{lstlisting}
+
+mit Primär- und Fremdschlüsseln für alle Tabellen:
+
+\begin{lstlisting}[caption=Primär- und Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluessel]{code:PrimaerUndFremdschluessel}
+ALTER TABLE public.event ADD PRIMARY KEY (eventid);
+ALTER TABLE public.message ADD PRIMARY KEY (messageid);
+ALTER TABLE public.participation ADD PRIMARY KEY (participationid);
+ALTER TABLE public.user ADD PRIMARY KEY (userid);
+ALTER TABLE event ADD CONSTRAINT event_creatorid FOREIGN KEY (creatorid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_eventid FOREIGN KEY (eventid) REFERENCES event (eventid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_senderid FOREIGN KEY (senderid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE message ADD CONSTRAINT message_recipientid FOREIGN KEY (recipientid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE participation ADD CONSTRAINT participation_userid FOREIGN KEY (userid) REFERENCES public.user (userid) MATCH FULL;
+ALTER TABLE participation ADD CONSTRAINT participation_eventid FOREIGN KEY (eventid) REFERENCES event (eventid) MATCH FULL;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan Query 1 mit Primär- und Fremdschlüsseln, firstnumber=1, label=aQuery1PrimaerUndFremdschluessel]{code:aQuery1PrimaerUndFremdschluessel}
+"Nested Loop  (cost=279.63..495.98 rows=50 width=108)"
+"  ->  Hash Join  (cost=279.63..481.63 rows=50 width=8)"
+"        Hash Cond: (p.eventid = e.eventid)"
+"        ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
+"        ->  Hash  (cost=279.00..279.00 rows=50 width=8)"
+"              ->  Seq Scan on event e  (cost=0.00..279.00 rows=50 width=8)"
+"                    Filter: (eventname = 'event1'::text)"
+"  ->  Index Scan using user_pkey on "user" u  (cost=0.00..0.27 rows=1 width=108)"
+"        Index Cond: (userid = p.userid)"
+\end{lstlisting}
+
+sowie Indexen für die Fremdschlüssel:
+\begin{lstlisting}[caption=Indexe für alle Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluesselUndIndex]{code:PrimaerUndFremdschluesselUndIndex}
+CREATE INDEX event_creatorid ON public.event(creatorid);
+CREATE INDEX message_eventid ON public.message(eventid);
+CREATE INDEX message_senderid ON public.message(senderid);
+CREATE INDEX message_recipientid ON public.message(recipientid);
+CREATE INDEX participation_userid ON public.participation(userid);
+CREATE INDEX participation_eventid ON public.participation(eventid);
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan Query 1 mit Index für alle Fremdschlüssel, firstnumber=1, label=aQuery1PrimaerUndFremdschluesselUndIndexFremdschluessel]{code:aQuery1PrimaerUndFremdschluesselUndIndexFremdschluessel}
+"Nested Loop  (cost=0.00..287.57 rows=1 width=38)"
+"  ->  Nested Loop  (cost=0.00..287.28 rows=1 width=8)"
+"        ->  Seq Scan on event e  (cost=0.00..279.00 rows=1 width=8)"
+"              Filter: (eventname = 'event1'::text)"
+"        ->  Index Scan using participation_eventid on participation p  (cost=0.00..8.27 rows=1 width=16)"
+"              Index Cond: (eventid = e.eventid)"
+"  ->  Index Scan using user_pkey on "user" u  (cost=0.00..0.27 rows=1 width=38)"
+"        Index Cond: (userid = p.userid)"
+\end{lstlisting}
+
+Indexe auf Nicht-Id-Spalten
+\begin{lstlisting}[caption=Indexe für alle Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluesselUndIndexNichtId]{code:PrimaerUndFremdschluesselUndIndexNichtId}
+CREATE INDEX event_date ON public.event(date);
+CREATE INDEX event_eventname ON public.event(eventname);
+CREATE INDEX event_occasion ON public.event(occasion);
+CREATE INDEX event_location ON public.event(location);
+CREATE INDEX event_lon ON public.event(lon);
+CREATE INDEX event_lat ON public.event(lat);
+CREATE INDEX event_numbermaleconfirmed ON public.event(numbermaleconfirmed);
+CREATE INDEX event_numberfemaleconfirmed ON public.event(numberfemaleconfirmed);
+CREATE INDEX message_textmessage ON public.message(textmessage);
+CREATE INDEX message_date ON public.message(date);
+CREATE INDEX user_name ON public.user(name);
+CREATE INDEX user_email ON public.user(email);
+CREATE INDEX user_gender ON public.user(gender);
+CREATE INDEX user_birthday ON public.user(birthday);
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan Query 1 mit Indexen für alle Fremdschlüssel, firstnumber=1, label=aQuery1PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery1PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
+"Nested Loop  (cost=0.00..16.84 rows=1 width=38)"
+"  ->  Nested Loop  (cost=0.00..16.55 rows=1 width=8)"
+"        ->  Index Scan using event_eventname on event e  (cost=0.00..8.27 rows=1 width=8)"
+"              Index Cond: (eventname = 'event1'::text)"
+"        ->  Index Scan using participation_eventid on participation p  (cost=0.00..8.27 rows=1 width=16)"
+"              Index Cond: (eventid = e.eventid)"
+"  ->  Index Scan using user_pkey on "user" u  (cost=0.00..0.27 rows=1 width=38)"
+"        Index Cond: (userid = p.userid)"
+\end{lstlisting}
+-------------------------------------------------------------
+
+Query 2: Alle weiblichen user anzeigen, die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 stattfindet, und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist.
+
+\begin{lstlisting}[caption=Query 2, firstnumber=1, label=Query2]{code:Query2}
+Select u.userId, u.name, u.email, u.gender, u.birthday
+from public.user u, public.event e, public.participation p
+where u.gender = 'w'
+AND u.birthday between '01.01.1986' AND '31.12.1992'
+AND e.date between '01.01.2013' AND '01.03.2013'
+AND e.eventid = p.eventid
+AND p.userid = u.userid
+AND e.numberMaleConfirmed / e.numberFemaleConfirmed < 0.5;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan für Query 2, firstnumber=1, label=aQuery2]{code:aQuery2}
+"Hash Join  (cost=218.37..511.08 rows=2 width=108)"
+"  Hash Cond: (e.eventid = p.eventid)"
+"  ->  Seq Scan on event e  (cost=0.00..292.60 rows=10 width=8)"
+"        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
+"  ->  Hash  (cost=217.77..217.77 rows=48 width=116)"
+"        ->  Hash Join  (cost=20.41..217.77 rows=48 width=116)"
+"              Hash Cond: (p.userid = u.userid)"
+"              ->  Seq Scan on participation p  (cost=0.00..160.64 rows=9664 width=16)"
+"              ->  Hash  (cost=20.40..20.40 rows=1 width=108)"
+"                    ->  Seq Scan on "user" u  (cost=0.00..20.40 rows=1 width=108)"
+"                          Filter: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date) AND (gender = 'w'::text))"
+\end{lstlisting}
+
+
+mit Primär- und Fremdschlüsseln für alle Tabellen:
+
+\begin{lstlisting}[caption=Ausführungsplan Query 2 mit Primär- und Fremdschlüsseln, firstnumber=1, label=aQuery2PrimaerUndFremdschluessel]{code:aQuery2PrimaerUndFremdschluessel}
+"Nested Loop  (cost=29.96..371.06 rows=10 width=38)"
+"  ->  Hash Join  (cost=29.96..235.16 rows=370 width=46)"
+"        Hash Cond: (p.userid = u.userid)"
+"        ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
+"        ->  Hash  (cost=29.50..29.50 rows=37 width=38)"
+"              ->  Seq Scan on "user" u  (cost=0.00..29.50 rows=37 width=38)"
+"                    Filter: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date) AND (gender = 'w'::text))"
+"  ->  Index Scan using event_pkey on event e  (cost=0.00..0.35 rows=1 width=8)"
+"        Index Cond: (eventid = p.eventid)"
+"        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
+\end{lstlisting}
+
+sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
+
+\begin{lstlisting}[caption=Ausführungsplan Query 2 mit Indexen, firstnumber=1, label=aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
+"Nested Loop  (cost=18.70..359.80 rows=10 width=38)"
+"  ->  Hash Join  (cost=18.70..223.90 rows=370 width=46)"
+"        Hash Cond: (p.userid = u.userid)"
+"        ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
+"        ->  Hash  (cost=18.24..18.24 rows=37 width=38)"
+"              ->  Bitmap Heap Scan on "user" u  (cost=4.98..18.24 rows=37 width=38)"
+"                    Recheck Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
+"                    Filter: (gender = 'w'::text)"
+"                    ->  Bitmap Index Scan on user_birthday  (cost=0.00..4.97 rows=72 width=0)"
+"                          Index Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
+"  ->  Index Scan using event_pkey on event e  (cost=0.00..0.35 rows=1 width=8)"
+"        Index Cond: (eventid = p.eventid)"
+"        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
+\end{lstlisting}
+
+-------------------------------------------------------------
+
+Query 3: Die Anzahl der textmessages gruppiert und absteigend sortiert nach numberFemaleConfirmed, die zwischen dem 01.01.2010 und dem 31.12.2012 geschrieben wurden, in denen das Wort Salsa vorkommt, deren Empfänger männlich sind und zwischen 1972 und 1982 geboren wurden, deren Absender weiblich sind und die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 in einem 100km Radius zu der GPS-Koordinate 11.5833 45.15.00 stattfindet und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist. Das Ergebnis soll nur die ersten fünf Treffer liefern.
+
+\begin{lstlisting}[caption=Query 3, firstnumber=1, label=Query3]{code:Query3}
+Select e.numberFemaleConfirmed, Count(m.messageid) as anzahlMessages
+from public.user u, public.event e, public.participation p, public.message m
+where u.gender = 'w'
+AND u.birthday between '01.01.1986' AND '31.12.1992'
+AND e.date between '01.01.2013' AND '01.03.2013'
+AND m.date between '01.01.2010' AND '31.12.2012'
+AND m.textmessage like '%Salsa'
+AND e.eventid = p.eventid
+AND p.userid = u.userid
+AND m.senderId = u.userId
+AND e.numberMaleConfirmed / e.numberFemaleConfirmed < 0.5
+AND DEGREES(acos(cos(RADIANS(90-e.lat))*cos(RADIANS(90-70))+sin(RADIANS(90-e.lat))*
+sin(RADIANS(90-70))*cos(RADIANS(e.lon-80))))/360*40074 < 10000
+AND m.recipientId in
+(Select u2.userId
+from public.user u2
+where u2.gender = 'm'
+AND u2.birthday between '01.01.1972' AND '31.12.1982'
+)
+Group by e.numberFemaleConfirmed
+Order by e.numberFemaleConfirmed DESC
+Limit 5
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan für Query 3, firstnumber=1, label=aQuery3]{code:aQuery3}
+"Limit  (cost=1386.84..1386.86 rows=1 width=12)"
+"  ->  GroupAggregate  (cost=1386.84..1386.86 rows=1 width=12)"
+"        ->  Sort  (cost=1386.84..1386.84 rows=1 width=12)"
+"              Sort Key: e.numberfemaleconfirmed"
+"              ->  Nested Loop  (cost=269.91..1386.83 rows=1 width=12)"
+"                    Join Filter: (m.senderid = p.userid)"
+"                    ->  Hash Join  (cost=239.79..1069.16 rows=3 width=20)"
+"                          Hash Cond: (e.eventid = p.eventid)"
+"                          ->  Seq Scan on event e  (cost=0.00..829.00 rows=92 width=12)"
+"                                Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5) AND (((degrees(acos(((cos(radians((90::double precision - lat))) * 0.939692620785908::double precision) + ((sin(radians((90::double precision - lat))) * 0.342020143325669::double precision) * cos(radians((lon - 80::double precision))))))) / 360::double precision) * 40074::double precision) < 10000::double precision))"
+"                          ->  Hash  (cost=235.16..235.16 rows=370 width=24)"
+"                                ->  Hash Join  (cost=29.96..235.16 rows=370 width=24)"
+"                                      Hash Cond: (p.userid = u.userid)"
+"                                      ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
+"                                      ->  Hash  (cost=29.50..29.50 rows=37 width=8)"
+"                                            ->  Seq Scan on "user" u  (cost=0.00..29.50 rows=37 width=8)"
+"                                                  Filter: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date) AND (gender = 'w'::text))"
+"                    ->  Materialize  (cost=30.13..314.39 rows=77 width=16)"
+"                          ->  Hash Semi Join  (cost=30.13..314.01 rows=77 width=16)"
+"                                Hash Cond: (m.recipientid = u2.userid)"
+"                                ->  Seq Scan on message m  (cost=0.00..279.00 rows=1533 width=24)"
+"                                      Filter: ((date >= '2010-01-01'::date) AND (date <= '2012-12-31'::date) AND (textmessage ~~ '%Salsa'::text))"
+"                                ->  Hash  (cost=29.50..29.50 rows=50 width=8)"
+"                                      ->  Seq Scan on "user" u2  (cost=0.00..29.50 rows=50 width=8)"
+"                                            Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan Query 3 mit Primär- und Fremdschlüsseln, firstnumber=1, label=aQuery3PrimaerUndFremdschluessel]{code:aQuery3PrimaerUndFremdschluessel}
+mit Primär- und Fremdschlüsseln für alle Tabellen:
+"Limit  (cost=546.93..546.95 rows=1 width=12)"
+"  ->  GroupAggregate  (cost=546.93..546.95 rows=1 width=12)"
+"        ->  Sort  (cost=546.93..546.93 rows=1 width=12)"
+"              Sort Key: e.numberfemaleconfirmed"
+"              ->  Nested Loop  (cost=333.57..546.92 rows=1 width=12)"
+"                    ->  Hash Join  (cost=333.57..535.37 rows=28 width=16)"
+"                          Hash Cond: (p.userid = u.userid)"
+"                          ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
+"                          ->  Hash  (cost=333.53..333.53 rows=3 width=24)"
+"                                ->  Nested Loop Semi Join  (cost=29.96..333.53 rows=3 width=24)"
+"                                      ->  Hash Join  (cost=29.96..315.28 rows=57 width=32)"
+"                                            Hash Cond: (m.senderid = u.userid)"
+"                                            ->  Seq Scan on message m  (cost=0.00..279.00 rows=1533 width=24)"
+"                                                  Filter: ((date >= '2010-01-01'::date) AND (date <= '2012-12-31'::date) AND (textmessage ~~ '%Salsa'::text))"
+"                                            ->  Hash  (cost=29.50..29.50 rows=37 width=8)"
+"                                                  ->  Seq Scan on "user" u  (cost=0.00..29.50 rows=37 width=8)"
+"                                                        Filter: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date) AND (gender = 'w'::text))"
+"                                      ->  Index Scan using user_pkey on "user" u2  (cost=0.00..0.32 rows=1 width=8)"
+"                                            Index Cond: (userid = m.recipientid)"
+"                                            Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
+"                    ->  Index Scan using event_pkey on event e  (cost=0.00..0.40 rows=1 width=12)"
+"                          Index Cond: (eventid = p.eventid)"
+"                          Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5) AND (((degrees(acos(((cos(radians((90::double precision - lat))) * 0.939692620785908::double precision) + ((sin(radians((90::double precision - lat))) * 0.342020143325669::double precision) * cos(radians((lon - 80::double precision))))))) / 360::double precision) * 40074::double precision) < 10000::double precision))"
+\end{lstlisting}
+
+
+sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
+
+\begin{lstlisting}[caption=Ausführungsplan Query 3 mit Indexen, firstnumber=1, label=aQuery3PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery3PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
+"Limit  (cost=355.27..355.29 rows=1 width=12)"
+"  ->  GroupAggregate  (cost=355.27..355.29 rows=1 width=12)"
+"        ->  Sort  (cost=355.27..355.28 rows=1 width=12)"
+"              Sort Key: e.numberfemaleconfirmed"
+"              ->  Nested Loop  (cost=18.70..355.26 rows=1 width=12)"
+"                    ->  Nested Loop  (cost=18.70..343.72 rows=28 width=16)"
+"                          ->  Nested Loop Semi Join  (cost=18.70..322.27 rows=3 width=24)"
+"                                ->  Hash Join  (cost=18.70..304.02 rows=57 width=32)"
+"                                      Hash Cond: (m.senderid = u.userid)"
+"                                      ->  Seq Scan on message m  (cost=0.00..279.00 rows=1533 width=24)"
+"                                            Filter: ((date >= '2010-01-01'::date) AND (date <= '2012-12-31'::date) AND (textmessage ~~ '%Salsa'::text))"
+"                                      ->  Hash  (cost=18.24..18.24 rows=37 width=8)"
+"                                            ->  Bitmap Heap Scan on "user" u  (cost=4.98..18.24 rows=37 width=8)"
+"                                                  Recheck Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
+"                                                  Filter: (gender = 'w'::text)"
+"                                                  ->  Bitmap Index Scan on user_birthday  (cost=0.00..4.97 rows=72 width=0)"
+"                                                        Index Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
+"                                ->  Index Scan using user_pkey on "user" u2  (cost=0.00..0.32 rows=1 width=8)"
+"                                      Index Cond: (userid = m.recipientid)"
+"                                      Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
+"                          ->  Index Scan using participation_userid on participation p  (cost=0.00..7.02 rows=10 width=16)"
+"                                Index Cond: (userid = u.userid)"
+"                    ->  Index Scan using event_pkey on event e  (cost=0.00..0.40 rows=1 width=12)"
+"                          Index Cond: (eventid = p.eventid)"
+"                          Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5) AND (((degrees(acos(((cos(radians((90::double precision - lat))) * 0.939692620785908::double precision) + ((sin(radians((90::double precision - lat))) * 0.342020143325669::double precision) * cos(radians((lon - 80::double precision))))))) / 360::double precision) * 40074::double precision) < 10000::double precision))"
+\end{lstlisting}

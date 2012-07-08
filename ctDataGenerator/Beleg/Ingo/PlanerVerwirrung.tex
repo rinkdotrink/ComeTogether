@@ -1,0 +1,100 @@
+\section{Planerverwirrung}\label{Planerverwirrung}
+Wie können Ausführungspläne noch beschleunigt werden? In PostgreSQL durch Umschreiben nur sehr begrenzt. Es ist zwar möglich, die Queries auf verschiedene Weisen zu schreiben, aber die Schreibweise hat auf den Optimizer nur in seltenen Fällen Einfluss.
+Wie sehen diese Fälle aus?
+Es gibt Querykonstruktionen\footnote{http://www.postgresql.org/docs/current/interactive/explicit-joins.html}, die den Planner verwirren können und somit zu langsamen Ausführungsplänen führen würden.
+
+Wird der Operator > oder der Operator < verwendet, kann der Planner die Tabellen nicht mehr mit Hilfe eines Hash-JOIN verknüpfen:
+
+\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=STRAIGHTJOIN1]{code:STRAIGHTJOIN1}
+Select u.userId, p.eventid
+from public.user u, public.event e, public.participation p
+where e.eventid < p.eventid + 1
+AND e.eventid > p.eventid - 1
+AND p.userid < u.userid + 1
+AND p.userid > u.userid - 1;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan nested loop join, firstnumber=1, label=aSTRAIGHTJOIN]{code:aSTRAIGHTJOIN}
+"Nested Loop  (cost=0.00..283418724402242.31 rows=1192507407395482 width=16)"
+"  Join Filter: ((e.eventid < (p.eventid + 1)) AND (e.eventid > (p.eventid - 1)))"
+"  ->  Nested Loop  (cost=0.00..2641025223.00 rows=11111111111 width=16)"
+"        Join Filter: ((p.userid < (u.userid + 1)) AND (p.userid > (u.userid - 1)))"
+"        ->  Seq Scan on participation p  (cost=0.00..22739.00 rows=1000000 width=16)"
+"        ->  Materialize  (cost=0.00..3125.00 rows=100000 width=8)"
+"              ->  Seq Scan on "user" u  (cost=0.00..2234.00 rows=100000 width=8)"
+"  ->  Materialize  (cost=0.00..52708.96 rows=965931 width=8)"
+"        ->  Seq Scan on event e  (cost=0.00..44105.31 rows=965931 width=8)"
+\end{lstlisting}
+
+besser:
+
+\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=eq]{code:eq}
+explain Select u.userId, p.eventid
+from public.user u, public.event e, public.participation p
+where e.eventid = p.eventid
+AND p.userid = u.userid;
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan hash join, firstnumber=1, label=ahash]{code:ahash}
+"Hash Join  (cost=43997.00..146580.72 rows=965931 width=16)"
+"  Hash Cond: (p.userid = u.userid)"
+"  ->  Hash Join  (cost=40122.00..113562.10 rows=965931 width=16)"
+"        Hash Cond: (e.eventid = p.eventid)"
+"        ->  Seq Scan on event e  (cost=0.00..44105.31 rows=965931 width=8)"
+"        ->  Hash  (cost=22739.00..22739.00 rows=1000000 width=16)"
+"              ->  Seq Scan on participation p  (cost=0.00..22739.00 rows=1000000 width=16)"
+"  ->  Hash  (cost=2234.00..2234.00 rows=100000 width=8)"
+"        ->  Seq Scan on "user" u  (cost=0.00..2234.00 rows=100000 width=8)"
+\end{lstlisting}
+
+Bei Tabellenspalten, die auf Gleichheit geprüft werden, kann der Planner sich für einen Hash-Join entscheiden. Wenn beide Operanden in dem Vergleich Ergebnis einer Berechnung sind, ist der Planner gezwungen, auf einen Merge-Join zurückzugreifen.
+
+\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=merge]{code:merge}
+explain Select u.userId, p.eventid
+from public.user u, public.event e, public.participation p
+where (e.eventid + 1) - 1  = (p.eventid + 1) - 1
+AND (p.userid + 1) - 1 = (u.userid + 1) -1
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan merge join, firstnumber=1, label=amerge]{code:amerge}
+"Merge Join  (cost=136351958.69..60508303947.65 rows=2414827500000 width=16)"
+"  Merge Cond: ((((e.eventid + 1) - 1)) = (((p.eventid + 1) - 1)))"
+"  ->  Sort  (cost=166544.39..168959.22 rows=965931 width=8)"
+"        Sort Key: (((e.eventid + 1) - 1))"
+"        ->  Seq Scan on event e  (cost=0.00..44105.31 rows=965931 width=8)"
+"  ->  Materialize  (cost=136185414.30..138685414.30 rows=500000000 width=16)"
+"        ->  Sort  (cost=136185414.30..137435414.30 rows=500000000 width=16)"
+"              Sort Key: (((p.eventid + 1) - 1))"
+"              ->  Merge Join  (cost=168485.16..12672485.16 rows=500000000 width=16)"
+"                    Merge Cond: ((((u.userid + 1) - 1)) = (((p.userid + 1) - 1)))"
+"                    ->  Sort  (cost=11907.32..12157.32 rows=100000 width=8)"
+"                          Sort Key: (((u.userid + 1) - 1))"
+"                          ->  Seq Scan on "user" u  (cost=0.00..2234.00 rows=100000 width=8)"
+"                    ->  Materialize  (cost=156577.84..161577.84 rows=1000000 width=16)"
+"                          ->  Sort  (cost=156577.84..159077.84 rows=1000000 width=16)"
+"                                Sort Key: (((p.userid + 1) - 1))"
+"                                ->  Seq Scan on participation p  (cost=0.00..22739.00 rows=1000000 width=16)"
+\end{lstlisting}
+
+Wenn nur ein Operand in dem Vergleich Ergebnis einer Berechnung ist, greift der Planner auf einen nested loop Join zurück:
+
+\begin{lstlisting}[caption=nested loop join, firstnumber=1, label=loop]{code:loop}
+explain Select u.userId, p.eventid
+from public.user u, public.event e, public.participation p
+where (e.eventid + 1) - 1  = 5
+AND (p.userid + 1) - 1 = 7
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Ausführungsplan nested loop join, firstnumber=1, label=aloop]{code:aloop}
+"Nested Loop  (cost=0.00..30193621347.37 rows=2415000000000 width=16)"
+"  ->  Nested Loop  (cost=0.00..6091095.87 rows=483000000 width=8)"
+"        ->  Seq Scan on "user" u  (cost=0.00..2234.00 rows=100000 width=8)"
+"        ->  Materialize  (cost=0.00..51373.94 rows=4830 width=0)"
+"              ->  Seq Scan on event e  (cost=0.00..51349.79 rows=4830 width=0)"
+"                    Filter: (((eventid + 1) - 1) = 5)"
+"  ->  Materialize  (cost=0.00..30264.00 rows=5000 width=8)"
+"        ->  Seq Scan on participation p  (cost=0.00..30239.00 rows=5000 width=8)"
+"              Filter: (((userid + 1) - 1) = 7)"
+\end{lstlisting}
+
+Es kann gesagt werden, dass Operanden in einem Vergleich nicht das Ergebnis einer Berechnung sein sollten.

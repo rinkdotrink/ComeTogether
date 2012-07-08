@@ -1,0 +1,6 @@
+\section{Was ist ein Ausführungsplan?}\label{WasIstEinAusfuehrungsplan}
+In einem Ausführungsplan wird beschrieben, in welchen Schritten ein DBMS einen Query ausführt. Auch die Reihenfolge der Schritte wird dabei angegeben.
+Da in einem Query nur beschrieben steht, was im Ergebnis gewünscht ist, aber kein Algorithmus, wie dieses Ergebnis errechnet werden soll, gibt es viele verschiedene Möglichkeiten, zu dem Ergebnis zu kommen. Das DBMS soll dabei den Ausführungsplan finden, der das Ergebnis effizient errechnet.
+
+Technisch betrachtet, ist der Ausführungsplan ein Baum. Die Abarbeitung des Ausführungsplans beginnt bei seinen Blättern. In den Blättern des Baumes stehen die Zugriffspfade (access paths).
+Der Zugriffspfad wird durch den Scan-Algorithmus angegeben. Ein Scan-Algorithmus gibt an, wie eine Tabelle durchlaufen wird.
