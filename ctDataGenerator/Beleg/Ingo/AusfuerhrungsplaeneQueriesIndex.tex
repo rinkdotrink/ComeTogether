@@ -23,6 +23,8 @@ AND p.userid = u.userid;
 "        ->  Seq Scan on "user" u  (cost=0.00..16.80 rows=480 width=108)"
 \end{lstlisting}
 
+Da bisher auf keiner Spalte ein Index gelegt wurde, werden die Daten aus den Tabellen mit einem Sequential Scan geholt.
+
 mit Primär- und Fremdschlüsseln für alle Tabellen:
 
 \begin{lstlisting}[caption=Primär- und Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluessel]{code:PrimaerUndFremdschluessel}

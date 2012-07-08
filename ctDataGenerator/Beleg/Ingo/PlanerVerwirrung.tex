@@ -3,9 +3,9 @@ Wie können Ausführungspläne noch beschleunigt werden? In PostgreSQL durch Umschr
 Wie sehen diese Fälle aus?
 Es gibt Querykonstruktionen\footnote{http://www.postgresql.org/docs/current/interactive/explicit-joins.html}, die den Planner verwirren können und somit zu langsamen Ausführungsplänen führen würden.
 
-Wird der Operator > oder der Operator < verwendet, kann der Planner die Tabellen nicht mehr mit Hilfe eines Hash-JOIN verknüpfen:
+Wird der Operator $>$ oder der Operator $<$\ verwendet, kann der Planer die Tabellen nicht mehr mit Hilfe eines Hash-JOIN verknüpfen:
 
-\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=STRAIGHTJOIN1]{code:STRAIGHTJOIN1}
+\begin{lstlisting}[caption=kein Hash Join möglich, firstnumber=1, label=keinHashJoin]{code:keinHashJoin}
 Select u.userId, p.eventid
 from public.user u, public.event e, public.participation p
 where e.eventid < p.eventid + 1
@@ -28,7 +28,7 @@ AND p.userid > u.userid - 1;
 
 besser:
 
-\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=eq]{code:eq}
+\begin{lstlisting}[caption=Hash Join möglich, firstnumber=1, label=HashJoinMoeglich]{code:HashJoinMoeglich}
 explain Select u.userId, p.eventid
 from public.user u, public.event e, public.participation p
 where e.eventid = p.eventid
@@ -47,9 +47,9 @@ AND p.userid = u.userid;
 "        ->  Seq Scan on "user" u  (cost=0.00..2234.00 rows=100000 width=8)"
 \end{lstlisting}
 
-Bei Tabellenspalten, die auf Gleichheit geprüft werden, kann der Planner sich für einen Hash-Join entscheiden. Wenn beide Operanden in dem Vergleich Ergebnis einer Berechnung sind, ist der Planner gezwungen, auf einen Merge-Join zurückzugreifen.
+Bei Tabellenspalten, die auf Gleichheit geprüft werden, kann der Planer sich für einen Hash-Join entscheiden. Wenn beide Operanden in dem Vergleich Ergebnis einer Berechnung sind, ist der Planer gezwungen, auf einen Merge-Join zurückzugreifen.
 
-\begin{lstlisting}[caption=STRAIGHT JOIN, firstnumber=1, label=merge]{code:merge}
+\begin{lstlisting}[caption=merge join, firstnumber=1, label=merge]{code:merge}
 explain Select u.userId, p.eventid
 from public.user u, public.event e, public.participation p
 where (e.eventid + 1) - 1  = (p.eventid + 1) - 1
