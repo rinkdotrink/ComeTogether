@@ -168,7 +168,7 @@ Mit Primär- und Fremdschlüsseln für alle Tabellen ergibt sich foldener Ausführun
 An diesem Ausführungsplan ist erkennbar, dass der Planer die Entscheidung, welche Tabelle treibend und welche innen sein soll, korrekt entscheidet. Das nested loop so wie es hier geplant ist, verursacht vorraussichtlich Kosten von 370 Zeilen * 0,38 = 129,5. Hätte der Planer treibende und innere Tabelle vertauscht, wären Kosten in Höhe von 1 * 235,16 = 235,16 entstanden.
 Kann der Planer auf einen Index Scan zugreifen der eine hohe Selektivität hat, dann entscheidet er sich oft für einen nested loop join. Greift er mit einem Sequential Scan die Daten ab, dann hasht er sie oft.
 
-Mit Indexen auf Fremdschlüssel- und Nicht-Id-Spalten ergibt sich folgender Ausführungsplan:
+Mit Indexen auf Fremdschlüssel- und Nicht-Id-Spalten ergibt sich folgender Aus\-führungsplan:
 
 \begin{lstlisting}[caption=Ausführungsplan Query 2 mit Indexen, firstnumber=1, label=aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
 "Nested Loop  (cost=18.70..359.80 rows=10 width=38)"
