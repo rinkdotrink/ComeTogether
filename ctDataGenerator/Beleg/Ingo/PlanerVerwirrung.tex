@@ -26,7 +26,7 @@ AND p.userid > u.userid - 1;
 "        ->  Seq Scan on event e  (cost=0.00..44105.31 rows=965931 width=8)"
 \end{lstlisting}
 
-besser:
+Wird in dem Querie statt mit den Operatoren $>$ und $<$\ mit dem Gleichheitsoperator gearbetet, kann der Planer einen Hash-Join verwenden und das führt in diesem Fall aus zu einem schnelleren Ausführungsplan.
 
 \begin{lstlisting}[caption=Hash Join möglich, firstnumber=1, label=HashJoinMoeglich]{code:HashJoinMoeglich}
 explain Select u.userId, p.eventid
