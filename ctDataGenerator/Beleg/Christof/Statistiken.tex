@@ -1,4 +1,4 @@
-\section{Statistiken}
+\section{Statistiken}\label{Statistiken}
 
 Der Planer sammelt Statistiken um die Anzahl der zu erwartenden Ergebniszeilen zu ermitteln. Relevant dabei ist die Anzahl der Zeilen in der Tabelle, sowie die Anzahl der von der Tabelle belegten Blöcke. Diese Daten stehen in der Systemtabelle pg\_class und der Planer kann mit Hilfe dieser Informationen die Anzahl der Zeilen für einen sequenziellen Scan über eine Tabelle, sowie den Speicher- und I/O-Aufwand ermitteln. Aktuell gehalten werden die Statistiken von den Befehlen \textbf{VACUUM} und \textbf{ANALYZE}, sowie von \textbf{CREATE INDEX}.
 Meistens jedoch werden die Tabellen nicht komplett gelesen, sondern müssen nach bestimmten Kriterien z.B. mit der WHERE-Klausel ausgewählt werden. Dazu muss der Planer weitere Statistiken sammeln, die in der Tabelle pg\_statistics stehen und mit der folgenden Anfrage eingesehen werden können: 

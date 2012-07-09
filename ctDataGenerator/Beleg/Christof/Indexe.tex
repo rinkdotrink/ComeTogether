@@ -1,4 +1,4 @@
-\section{Indexe}
+\section{Indexe}\label{Indexe}
 
 Ein Index auf eine Spalte lohnt sich nur bei hoher Selektivität. Wenn die Selektivität nicht hoch ist, muss sowieso die gesamte Tabelle durchgegangen werden, d.h. jeder Block angefasst werden.
 Wenn der Planer mit analyze genug Statistiken hat, entscheidet er, ob er den Index verwendet oder nicht.
@@ -6,7 +6,7 @@ Wenn der Planer mit analyze genug Statistiken hat, entscheidet er, ob er den Ind
 Ein Index lohnt sich nicht, wenn man viele Ergebnisse erwartet und einen nur die ersten zehn Zeilen interessieren. Denn dann kann sich der Planer das durchhashen und sortieren ersparen.
 Der Planer sollte den Index nicht verwenden, wenn ein Limit von z.B. zehn angegeben wurde.
 
-\subsection{Indextypen}
+\subsection{Indextypen}\label{Indextypen}
 
 Von PostgreSQL werden derzeit vier Indextypen unterstützt:
 
@@ -26,7 +26,7 @@ Hierbei handelt es sich um einen invertierten Index, der Werte mit mehreren Schl
 
 \end{itemize}
 
-\subsection{Pläne mit Bitmap Index Scan}
+\subsection{Pläne mit Bitmap Index Scan}\label{Plaene}
 
 Der reine Indexscan eignet sich am besten dort, wo die Selektivität sehr hoch ist und der reine Sequential Scan sollte bei niedriger Selektivität verwendet werde, also dann wenn die Tabelle komplett oder fast komplett gelesen werden soll. Der Bitmap Index Scan dagegen soll das gesamte Spektrum zwischen Index- und Sequential Scan abdecken, also die Vorteile von beiden Indextypen kombinieren. 
 
