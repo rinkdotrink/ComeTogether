@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Package</type>
+    <coordinates>
+      <x>20</x>
+      <y>20</y>
+      <w>790</w>
+      <h>560</h>
+    </coordinates>
+    <panel_attributes>de.datagenerator.dbwriter
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>350</y>
+      <w>260</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>DBKundeWriter
+--
+--
+-writeKunde(aKunde : Product) : void
+-setId(aId : long) : void
+-setName(aName : String) : void
+-setKundenNr(aKundenNr : long) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>90</x>
+      <y>460</y>
+      <w>260</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>DBProduktWriter
+--
+--
+-writeProdukt(aProdukt : Product) : void
+-setId(aId : long) : void
+-setName(aName : String) : void
+-setPreis(aPreisInCent : int) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>300</x>
+      <y>290</y>
+      <w>50</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;170</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>360</y>
+      <w>250</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>DBWarenkorbWriter
+--
+--
+-writeWKorb(aWKorb : WKorb) : void
+-setId(aId : long) : void
+-setKundenId(aKundenId : long) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>560</x>
+      <y>290</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>430</x>
+      <y>460</y>
+      <w>350</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>DBWKorbProduktWriter
+--
+--
+-writeWKorbProdukt(aWKorbProdukt : WKorbProdukt)
+-setId(aId : long) : void
+-setProduktId(aProduktId : long) : void
+-setBestellzeileId(aBestellzeileId : long) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>730</x>
+      <y>290</y>
+      <w>50</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;170</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>30</x>
+      <y>60</y>
+      <w>750</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>/DBWriter/
+--
+#preparedStatement : PreparedStatement
+-connection : Connection
+-resultSet : ResultSet
+--
+/+write(aProduct : Product) : void/
++close() : void
+#getConnection() : Connection
+#getPreparedStmt() : PreparedStatement
+#initDBWriter() : void
+/#prepareStatement() : void/
+#loadSQLDriver() : void
+#setUpDBConnection() : void
+-closeResultSet() : void
+-closeConnection() : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>70</x>
+      <y>290</y>
+      <w>50</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;60</additional_attributes>
+  </element>
+</diagram>

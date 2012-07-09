@@ -1,0 +1,34 @@
+\section{Planvergleich}
+
+MIt dem Befehl \textbf{EXPLAIN ANALYZE} kann man die geschätzten Kosten mit den Ergebnissen der Ausführung vergleichen. Die Anfrage wird auch auch tatsächlich ausgeführt:
+
+\begin{verbatim}
+"Hash Join  (cost=480.53..506.29 rows=1 width=38) 
+		(actual time=19.767..20.204 rows=1 loops=1)"
+"  Hash Cond: (u.userid = p.userid)"
+"  ->  Seq Scan on "user" u  
+		(cost=0.00..22.00 rows=1000 width=38) 
+		(actual time=0.029..0.279 rows=1000 loops=1)"
+"  ->  Hash  (cost=480.52..480.52 rows=1 width=8) 
+				(actual time=19.439..19.439 rows=1 loops=1)"
+"        Buckets: 1024  Batches: 1  Memory Usage: 1kB"
+"        ->  Hash Join  (cost=279.01..480.52 rows=1 width=8) 
+							(actual time=9.220..19.428 rows=1 loops=1)"
+"              Hash Cond: (p.eventid = e.eventid)"
+"              ->  Seq Scan on participation p  
+									(cost=0.00..164.00 rows=10000 width=16) 
+									(actual time=0.037..4.178 rows=10000 loops=1)"
+"              ->  Hash  (cost=279.00..279.00 rows=1 width=8) 
+									(actual time=9.109..9.109 rows=1 loops=1)"
+"                    Buckets: 1024  Batches: 1  Memory Usage: 1kB"
+"                    ->  Seq Scan on event e  
+										(cost=0.00..279.00 rows=1 width=8) 
+										(actual time=0.040..9.102 rows=1 loops=1)"
+"                          Filter: (eventname = 'event1'::text)"
+"Total runtime: 20.386 ms"
+
+\end{verbatim}
+
+Die Zahlen in der ersten Klammer sind dieselben wie bei \textbf{EXPLAIN} und die Daten in der zweiten Klammer enthalten analog zu den Kosten die tatsächliche Ausführungszeit sowie die tatsächliche Anzahl der Zeilen. Der Parameter loops zeigt an wie oft dieser Teilplan ausgeführt wird, spielt jedoch erst bei Joins eine Rolle, denn bei einfachen Anfragen ist die Zahl logischerweise eine 1. 
+
+Bei \textbf{EXPLAIN ANALYZE} ist es am wichtigsten darauf zu achten, ob die Zeilenschätzung richtig war. Bei größeren Abweichungen müssen die Statistiken verbessert werden.

@@ -1,0 +1,34 @@
+\section{Die Abarbeitung von Abfragen in PostgreSQL}
+\begin{enumerate} 
+\item \textbf{Empfang des SQL-Befehls} \\
+Nachdem der SQL-Befehl über eine Netzwerkverbindung übertragen wurde, findet die Kodierungsumwandlung statt, 
+und die weiteren Phasen der Abarbeitung sehen den Befehl in der Serverkodierung. Hierbei gibt es nur sehr
+geringe Optimierungsmöglichkeiten. Es können theoretisch CPU-Zyklen gespart werden, wenn die Clientkodierung 
+gleich der Serverkodierung ist, ansonsten wird eine Konvertierung durchgeführt. Diese Auswirkungen sind jedoch sehr gering.
+Der Parameter \textit{client\_encoding} informiert den Server darüber, welche Kodierung die ankommenden Befehle haben 
+und welche Kodierung das Anfrageergebnis haben soll, welches an den Client gesendet wird. Die Voreinstellung 
+gibt an welche Kodierung der Server intern verwendet.
+
+\item \textbf{Parser} \\
+In dieser Abarbeitungsphase wird die kodierte Befehlszeichenkette durch einen internen Parse-Baum dargestellt. 
+Des Weiteren wird die Befehlszeichenkette auf semantische Bedingungen überprüft und etwas bearbeitet. Die SQL-Befehle werden dann 
+aufgeteilt in sogenannte optimierbare Anweisungen(SELECT, INSERT, UPDATE und DELETE) und Hilfsanweisungen.
+Die Hilfsanweisungen werden später direkt ausgeführt und sie erzeugen keine Ausgabe. Dagegen kommen die optimierbaren 
+Anweisungen in den Rewriter. Für den Parser gibt es von der Anwenderseite keine Möglichkeit die Geschwindigkeit 
+zu optimieren. 
+
+
+\item \textbf{Query Rewriter} \\
+Der Rewriter wendet die Anfrageumschreibregeln(Query Rewrite Rules) an. Dabei werden die Sichten(Views) und andere
+benutzerdefinierte Regeln aufgelöst, in die Anfrage eingebaut und im Parse-Baum ersetzt. Da der Rewriter 
+vor dem Planer angesiedelt ist, bekommt der Planer es nicht mit, ob die Anfrage aus einer Sicht kam oder nicht. Mit der 
+Erstellung einer Sicht hat man somit keinen Optimierungsvorteil.
+
+\item \textbf{Planer / Optimizer} \\
+Der Planer bekommt den möglicherweise umgeschriebenen Parse-Baum und hat die Aufgabe einen Ausführungsplan(execution plan) zu erstellen, der ebenfalls ein Baum ist.
+Der Ausführungsplan beschreibt wie auf die Tabellen zugegriffen werden soll, also welche Indexe und Join-Algorithmen verwendet werden sollen und in welcher Reihenfolge. Es soll möglichst der optimalste und schnellste Ausführungsplan gefunden werden. 
+
+\item \textbf{Executor} \\ 
+Der vom Planer auserwählte Ausführungsplan wird vom Executor ausgeführt. Dabei werden Zugriffsrechte auf Tabellen und andere Objekte sowie Constraints geprüft. Die Laufzeit der Ausführung hängt nicht nur davon ab ob der Plan gut ist, sondern auch von der gesamten Systemkonfiguration.
+
+\end{enumerate}

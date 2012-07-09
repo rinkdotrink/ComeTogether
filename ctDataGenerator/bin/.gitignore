@@ -1,0 +1,23 @@
+/logs
+/target
+/Files
+*.class
+*.swp
+*.class
+*.classpath
+*.project
+.project
+.classpath
+*.prefs
+*.project
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+
+# Package Files #
+*.jar
+*.war
+*.ear
