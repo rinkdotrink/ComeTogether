@@ -24,16 +24,16 @@ AND p.userid = u.userid;
 \end{lstlisting}
 
 Da bisher auf keine Spalte ein Index gelegt wurde, werden die Daten aus den Tabellen mit einem Sequential Scan geholt.
-Um die Tabellen event und participation zu joinen wird ein Hash-Join verwendet, da das Join-Attribute eventid der beiden Tabellen mit dem Gleichheitsoperator verglichen wird.
+Um die Tabellen event und participation zu joinen, wird ein Hash-Join verwendet, da das Join-Attribute eventid der beiden Tabellen mit dem Gleichheitsoperator verglichen wird.
 Bei diesem Ausführungsplan ist zu sehen, dass Hash Joins nichts mit Hash Indexen zu tun haben, die in diesem Beispiel gar nicht existieren. Ein Hash Join nutzt keinen Hash-Index sondern eine temporäre Hashtabelle, die on-the-fly für den Join erstellt wird.
-Die Ergebnisrelation die entsteht, nachdem die Event- und die Participationtabelle gejoint wurden wird nun wiederum mit der Tabelle User gejoint. Da auch hier das Join-Attribut userid der beiden Relationen mit dem Gleichheitsoperator verglichen wird, kommt wieder ein Hash-Join zum Einsatz.
+Die Ergebnisrelation die entsteht, nachdem die Event- und die Participationtabelle gejoint wurden, wird nun wiederum mit der Tabelle User gejoint. Da auch hier das Join-Attribut userid der beiden Relationen mit dem Gleichheitsoperator verglichen wird, kommt wieder ein Hash-Join zum Einsatz.
 
 Die geschätzten Kosten für die Ausführung werden in Disk Page Fetches gemessen. Die erste Zahl steht für die Kosten, die entstehen, bevor die erste Zeile zurückgegeben werden kann. Die zweite Zahl steht für die Kosten, die entstehen, wenn alle Zeilen zurückgegeben werden.
 In dem Beispiel wird deutlich, dass für einen Sequential Scan keine vorherige Investition nötig ist und somit auch keine Kosten entstehen, bevor die erste Zeile geliefert werden kann.
 
 Beim sequentiellen Scannen der Events vom Datenträger verursacht das Filtern des Events mit dem Namen 'event1' keine zusätzlichen Kosten, da dafür keine zusätzlichen Disk Pages vom Datenträger geholt werden müssen. Es werden nur alle verworfen, die nicht den Namen event1 haben.
 
-Der Hash-Join der Tabellen Event und Participation verlangt, dass die Tabelle Event komplett durchgehasht wird. Um sie durchhashen zu können, muss der Sequential Scan komplett abgeschlossen sein. D.h. die Startkosten für das Durchhashen der Tabelle Event sind mindestens so groß, wie die Gesamtkosten für das vorherige Lesen vom Datenträger.
+Der Hash-Join der Tabellen Event und Participation verlangt, dass die Tabelle Event komplett durchgehasht wird. Um sie durchhashen zu können, muss der Sequential Scan komplett abgeschlossen sein. D.h. die Startkosten für das Durchhashen der Tabelle Event sind mindestens so groß wie die Gesamtkosten für das vorherige Lesen vom Datenträger.
 
 Der Hash-Join der Tabellen Event und Participation hat mindestens die Startkosten der Gesamtkosten des Durchhashens der Tabelle Event.
 
@@ -119,7 +119,6 @@ CREATE INDEX user_birthday ON public.user(birthday);
 "  ->  Index Scan using user_pkey on "user" u  (cost=0.00..0.27 rows=1 width=38)"
 "        Index Cond: (userid = p.userid)"
 \end{lstlisting}
--------------------------------------------------------------
 
 Der nun erzeugte Ausführungsplan senkt die Gesamtkosten von vorher 287.57 auf jetzt 16.84. Erreicht wurde diese Geschwindigkeitssteigerung durch den Index auf die Spalte eventname.
 
@@ -151,7 +150,7 @@ AND e.numberMaleConfirmed / e.numberFemaleConfirmed < 0.5;
 \end{lstlisting}
 
 
-mit Primär- und Fremdschlüsseln für alle Tabellen:
+Mit Primär- und Fremdschlüsseln für alle Tabellen ergibt sich foldener Ausführungsplan:
 
 \begin{lstlisting}[caption=Ausführungsplan Query 2 mit Primär- und Fremdschlüsseln, firstnumber=1, label=aQuery2PrimaerUndFremdschluessel]{code:aQuery2PrimaerUndFremdschluessel}
 "Nested Loop  (cost=29.96..371.06 rows=10 width=38)"
@@ -167,9 +166,9 @@ mit Primär- und Fremdschlüsseln für alle Tabellen:
 \end{lstlisting}
 
 An diesem Ausführungsplan ist erkennbar, dass der Planer die Entscheidung, welche Tabelle treibend und welche innen sein soll, korrekt entscheidet. Das nested loop so wie es hier geplant ist, verursacht vorraussichtlich Kosten von 370 Zeilen * 0,38 = 129,5. Hätte der Planer treibende und innere Tabelle vertauscht, wären Kosten in Höhe von 1 * 235,16 = 235,16 entstanden.
-Kann der Planer auf einen Index Scan zugreifen der eine hohe Selektivität hat, dann entscheidet er sich für einen nested loop join. Greift er mit einem Sequential Scan die Daten ab, dann hasht er sie.
+Kann der Planer auf einen Index Scan zugreifen der eine hohe Selektivität hat, dann entscheidet er sich oft für einen nested loop join. Greift er mit einem Sequential Scan die Daten ab, dann hasht er sie oft.
 
-sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
+Mit Indexen auf Fremdschlüssel- und Nicht-Id-Spalten ergibt sich folgender Ausführungsplan:
 
 \begin{lstlisting}[caption=Ausführungsplan Query 2 mit Indexen, firstnumber=1, label=aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
 "Nested Loop  (cost=18.70..359.80 rows=10 width=38)"
@@ -187,9 +186,8 @@ sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
 "        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
 \end{lstlisting}
 
-In diesem Ausführungsplan kommt erstmals ein Bitmap Index Scan zum Einsatz. Das ist möglich, da auf user.birthday indiziert wurde. Da alle Nutzer gesucht werden, deren Geburtstag im Bereich 1986-01-01 und 1992-12-31 liegen, bietet sich ein Bitmap Index Scan an.
+In diesem Ausführungsplan kommt erstmals ein Bitmap Index Scan zum Einsatz. Das ist möglich, da auf user.birthday indiziert wurde. Da alle Nutzer gesucht werden, deren Geburtstag im Bereich 1986-01-01 und 1992-12-31 liegen, bietet sich ein Bitmap Index Scan an. Ein Bismap Index wird meist bei einer Selektivität zwischen 5 und 95 Prozent verwendet.
 
--------------------------------------------------------------
 
 Query 3: Die Anzahl der textmessages gruppiert und absteigend sortiert nach numberFemaleConfirmed, die zwischen dem 01.01.2010 und dem 31.12.2012 geschrieben wurden, in denen das Wort Salsa vorkommt, deren Empfänger männlich sind und zwischen 1972 und 1982 geboren wurden, deren Absender weiblich sind und die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 in einem 100km Radius zu der GPS-Koordinate 11.5833 45.15.00 stattfindet und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist. Das Ergebnis soll nur die ersten fünf Treffer liefern.
 
@@ -246,60 +244,8 @@ Limit 5
 "                                            Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Ausführungsplan Query 3 mit Primär- und Fremdschlüsseln, firstnumber=1, label=aQuery3PrimaerUndFremdschluessel]{code:aQuery3PrimaerUndFremdschluessel}
-mit Primär- und Fremdschlüsseln für alle Tabellen:
-"Limit  (cost=546.93..546.95 rows=1 width=12)"
-"  ->  GroupAggregate  (cost=546.93..546.95 rows=1 width=12)"
-"        ->  Sort  (cost=546.93..546.93 rows=1 width=12)"
-"              Sort Key: e.numberfemaleconfirmed"
-"              ->  Nested Loop  (cost=333.57..546.92 rows=1 width=12)"
-"                    ->  Hash Join  (cost=333.57..535.37 rows=28 width=16)"
-"                          Hash Cond: (p.userid = u.userid)"
-"                          ->  Seq Scan on participation p  (cost=0.00..164.00 rows=10000 width=16)"
-"                          ->  Hash  (cost=333.53..333.53 rows=3 width=24)"
-"                                ->  Nested Loop Semi Join  (cost=29.96..333.53 rows=3 width=24)"
-"                                      ->  Hash Join  (cost=29.96..315.28 rows=57 width=32)"
-"                                            Hash Cond: (m.senderid = u.userid)"
-"                                            ->  Seq Scan on message m  (cost=0.00..279.00 rows=1533 width=24)"
-"                                                  Filter: ((date >= '2010-01-01'::date) AND (date <= '2012-12-31'::date) AND (textmessage ~~ '%Salsa'::text))"
-"                                            ->  Hash  (cost=29.50..29.50 rows=37 width=8)"
-"                                                  ->  Seq Scan on "user" u  (cost=0.00..29.50 rows=37 width=8)"
-"                                                        Filter: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date) AND (gender = 'w'::text))"
-"                                      ->  Index Scan using user_pkey on "user" u2  (cost=0.00..0.32 rows=1 width=8)"
-"                                            Index Cond: (userid = m.recipientid)"
-"                                            Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
-"                    ->  Index Scan using event_pkey on event e  (cost=0.00..0.40 rows=1 width=12)"
-"                          Index Cond: (eventid = p.eventid)"
-"                          Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5) AND (((degrees(acos(((cos(radians((90::double precision - lat))) * 0.939692620785908::double precision) + ((sin(radians((90::double precision - lat))) * 0.342020143325669::double precision) * cos(radians((lon - 80::double precision))))))) / 360::double precision) * 40074::double precision) < 10000::double precision))"
-\end{lstlisting}
-
-
-sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
-
-\begin{lstlisting}[caption=Ausführungsplan Query 3 mit Indexen, firstnumber=1, label=aQuery3PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery3PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
-"Limit  (cost=355.27..355.29 rows=1 width=12)"
-"  ->  GroupAggregate  (cost=355.27..355.29 rows=1 width=12)"
-"        ->  Sort  (cost=355.27..355.28 rows=1 width=12)"
-"              Sort Key: e.numberfemaleconfirmed"
-"              ->  Nested Loop  (cost=18.70..355.26 rows=1 width=12)"
-"                    ->  Nested Loop  (cost=18.70..343.72 rows=28 width=16)"
-"                          ->  Nested Loop Semi Join  (cost=18.70..322.27 rows=3 width=24)"
-"                                ->  Hash Join  (cost=18.70..304.02 rows=57 width=32)"
-"                                      Hash Cond: (m.senderid = u.userid)"
-"                                      ->  Seq Scan on message m  (cost=0.00..279.00 rows=1533 width=24)"
-"                                            Filter: ((date >= '2010-01-01'::date) AND (date <= '2012-12-31'::date) AND (textmessage ~~ '%Salsa'::text))"
-"                                      ->  Hash  (cost=18.24..18.24 rows=37 width=8)"
-"                                            ->  Bitmap Heap Scan on "user" u  (cost=4.98..18.24 rows=37 width=8)"
-"                                                  Recheck Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
-"                                                  Filter: (gender = 'w'::text)"
-"                                                  ->  Bitmap Index Scan on user_birthday  (cost=0.00..4.97 rows=72 width=0)"
-"                                                        Index Cond: ((birthday >= '1986-01-01'::date) AND (birthday <= '1992-12-31'::date))"
-"                                ->  Index Scan using user_pkey on "user" u2  (cost=0.00..0.32 rows=1 width=8)"
-"                                      Index Cond: (userid = m.recipientid)"
-"                                      Filter: ((birthday >= '1972-01-01'::date) AND (birthday <= '1982-12-31'::date) AND (gender = 'm'::text))"
-"                          ->  Index Scan using participation_userid on participation p  (cost=0.00..7.02 rows=10 width=16)"
-"                                Index Cond: (userid = u.userid)"
-"                    ->  Index Scan using event_pkey on event e  (cost=0.00..0.40 rows=1 width=12)"
-"                          Index Cond: (eventid = p.eventid)"
-"                          Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5) AND (((degrees(acos(((cos(radians((90::double precision - lat))) * 0.939692620785908::double precision) + ((sin(radians((90::double precision - lat))) * 0.342020143325669::double precision) * cos(radians((lon - 80::double precision))))))) / 360::double precision) * 40074::double precision) < 10000::double precision))"
-\end{lstlisting}
+Über das GroupAggregate naher der Wurzel des Ausführungsplanes wird das "`Group by e.numberFemaleConfirmed"' umgesetzt.
+Über das Sort mit dem Sort Key e.numberfemaleconfirmed wird das Order by e.numberFemaleConfirmed DESC umgesetzt.
+Das Limit im Ausführungsplan kümmert sich darum, dass nur die ersten fünf Treffer geliefert werden.
+Das Subquerie wird zu einem Hash Semi Join aufgelöst.
+Auf die Ausführungspläne mit Primär- und Fremdschlüsselattributen, sowie Indexen auf Nichtschlüsselattribute wird aus Gründen der Übersichtlichkeit verzichtet. In den Ausführungsplänen dazu waren auch keine Überraschungen erkennbar.
