@@ -1,0 +1,58 @@
+\section{Plananalyse}
+
+Mit dem Befehl EXPLAIN gefolgt von der eigentlichen Anfrage können die Ausführungpläne angesehen werden:
+
+Beispiel1 ohne Indexe:
+\begin{verbatim}
+EXPLAIN Select u.userId, u.name, u.email, u.gender, u.birthday
+from public.user u, public.event e, public.participation p
+where e.eventname = 'event1'
+AND e.eventid = p.eventid
+AND p.userid = u.userid;
+\end{verbatim}
+
+\begin{verbatim}
+"Hash Join  (cost=480.53..506.29 rows=1 width=38)"
+"  Hash Cond: (u.userid = p.userid)"
+"  ->  Seq Scan on "user" u  (cost=0.00..22.00 rows=1000 width=38)"
+"  ->  Hash  (cost=480.52..480.52 rows=1 width=8)"
+"        ->  Hash Join  (cost=279.01..480.52 rows=1 width=8)"
+"              Hash Cond: (p.eventid = e.eventid)"
+"              ->  Seq Scan on participation p  
+									(cost=0.00..164.00 rows=10000 width=16)"
+"              ->  Hash  (cost=279.00..279.00 rows=1 width=8)"
+"                    ->  Seq Scan on event e  
+													(cost=0.00..279.00 rows=1 width=8)"
+"                          Filter: (eventname = 'event1'::text)"
+
+\end{verbatim}
+
+\begin{itemize}
+\item Die erste Zahl nach dem "`cost"' sind die Startkosten. Es ist der geschätzte Aufwand, den der Executor investieren muss, bevor der Planknoten Ergebnisse produzieren kann. Eine 0.00 bedeutet, dass bei einem sequenziellen Scan die Ergebnisse sofort ausgegeben werden, sobald der Scan ausgeführt wird.  
+
+\item Die zweite Zahl ist der geschätzte Aufwand für die Abarbeitung des Planknotens und somit die interessante von den beiden Zahlen.
+
+\item Die Zeilenzahl(rows) ist eine Schätzung über die Anzahl der ausgegebenen Ergebniszeilen. Anhand dieser Zahl wird die Abwägung getroffen, ob ein Indexscan günstiger ist oder auch nicht und ob andere Planvarianten infrage kommen. 
+
+\item Die letzte Zahl gibt die Größe der Ergebniszeile in Bytes an(width). Man kann mit Hilfe der Zeilenzahl(rows) den Speicherbedarf der Ergebnismenge vorhersehen(rows * width).
+\end{itemize}
+
+Die geschätzten Kosten für einen sequenziellen Scan der Tabelle "`user"', die in unserem Beispiel1 auf 22.00 geschätzt werden,  lassen sich mit Hilfe folgender Anfrage in PostgreSQL leicht berechnen: \\ 
+
+SELECT relpages, reltuples FROM pg\_class WHERE relname = 'user'
+\\
+
+Das Ergebnis dieser Anfrage ist: \\
+relpages: 12 \\
+reltuples: 1000
+
+Das bedeutet, dass die Tabelle "`user"' aus 12 Diskpages besteht und 1000 Zeilen enthält.
+
+Der geschätzte Aufwand für die Abarbeitung des Planknotens, der nur aus einem sequenziellen Scan besteht (Seq Scan on "`user"' u  (cost=0.00..22.00 rows=1000 width=38)
+), wird wie folgt berechnet:
+
+(Anzahl der Diskpages(je 8 KByte) x seq\_page\_cost) + ( rows x cpu\_tuple\_cost)) 
+In unserem Beispiel1:
+(12 * 1.0) + (1000 * 0.01) = 22 
+
+Also die Anzahl der Seiten mal die Kosten für das sequenzielle Lesen einer Page plus die Anzahl der Zeilen mal die Kosten für die Abarbeitung einer Zeile in der CPU.
