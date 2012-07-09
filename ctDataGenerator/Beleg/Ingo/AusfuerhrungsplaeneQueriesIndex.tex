@@ -23,9 +23,21 @@ AND p.userid = u.userid;
 "        ->  Seq Scan on "user" u  (cost=0.00..16.80 rows=480 width=108)"
 \end{lstlisting}
 
-Da bisher auf keiner Spalte ein Index gelegt wurde, werden die Daten aus den Tabellen mit einem Sequential Scan geholt.
+Da bisher auf keine Spalte ein Index gelegt wurde, werden die Daten aus den Tabellen mit einem Sequential Scan geholt.
+Um die Tabellen event und participation zu joinen wird ein Hash-Join verwendet, da das Join-Attribute eventid der beiden Tabellen mit dem Gleichheitsoperator verglichen wird.
+Bei diesem Ausführungsplan ist zu sehen, dass Hash Joins nichts mit Hash Indexen zu tun haben, die in diesem Beispiel gar nicht existieren. Ein Hash Join nutzt keinen Hash-Index sondern eine temporäre Hashtabelle, die on-the-fly für den Join erstellt wird.
+Die Ergebnisrelation die entsteht, nachdem die Event- und die Participationtabelle gejoint wurden wird nun wiederum mit der Tabelle User gejoint. Da auch hier das Join-Attribut userid der beiden Relationen mit dem Gleichheitsoperator verglichen wird, kommt wieder ein Hash-Join zum Einsatz.
 
-mit Primär- und Fremdschlüsseln für alle Tabellen:
+Die geschätzten Kosten für die Ausführung werden in Disk Page Fetches gemessen. Die erste Zahl steht für die Kosten, die entstehen, bevor die erste Zeile zurückgegeben werden kann. Die zweite Zahl steht für die Kosten, die entstehen, wenn alle Zeilen zurückgegeben werden.
+In dem Beispiel wird deutlich, dass für einen Sequential Scan keine vorherige Investition nötig ist und somit auch keine Kosten entstehen, bevor die erste Zeile geliefert werden kann.
+
+Beim sequentiellen Scannen der Events vom Datenträger verursacht das Filtern des Events mit dem Namen 'event1' keine zusätzlichen Kosten, da dafür keine zusätzlichen Disk Pages vom Datenträger geholt werden müssen. Es werden nur alle verworfen, die nicht den Namen event1 haben.
+
+Der Hash-Join der Tabellen Event und Participation verlangt, dass die Tabelle Event komplett durchgehasht wird. Um sie durchhashen zu können, muss der Sequential Scan komplett abgeschlossen sein. D.h. die Startkosten für das Durchhashen der Tabelle Event sind mindestens so groß, wie die Gesamtkosten für das vorherige Lesen vom Datenträger.
+
+Der Hash-Join der Tabellen Event und Participation hat mindestens die Startkosten der Gesamtkosten des Durchhashens der Tabelle Event.
+
+Nun werden Primär- und Fremdschlüssel für alle Tabellen vergeben:
 
 \begin{lstlisting}[caption=Primär- und Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluessel]{code:PrimaerUndFremdschluessel}
 ALTER TABLE public.event ADD PRIMARY KEY (eventid);
@@ -52,7 +64,11 @@ ALTER TABLE participation ADD CONSTRAINT participation_eventid FOREIGN KEY (even
 "        Index Cond: (userid = p.userid)"
 \end{lstlisting}
 
-sowie Indexen für die Fremdschlüssel:
+Nach der Vergabe der Primär- und Fremdschlüssel wird ein anderer Ausführungsplan erzeugt. Es fällt auf, dass die Tabelle user nicht mehr über einen Sequential Scan eingelesen wird, sondern über einen Index Scan. Das wird verursacht weil PostgreSQL beim Anlegen von Primärschlüsseln auch gleich einen Index für jedes Primärschlüsselattribut anlegt. Und da die Relation, die durch den Hash-Join von Event und Participation entsteht per nested loop auf userid = p.userid abfragt, kann p.userid als Schlüssel des Index Scan verwendet werden. PostgreSQL weiß, da es sich um einen Primärschlüssel handelt, wird auch nur höchstens eine Zeile zurückgeliefert. Und da die referentielle Integrität es verbietet, dass in einem Fremdschlüsselattribut ein Wert steht, der als Primärschlüssel nicht vorkommt, wird auch mindestens eine Zeile geliefert.
+Der Planer schätzt, dass 50 Zeilen mit dem Eventnamen event1 geliefert werden. Und es werden 10000 Zeilen aus der Tabelle Participation geliefert. Werden diese beiden Tabellen über die Join-Bedingung p.eventid = e.eventid verknüpft, bleiben 50 Zeilen übrig.
+Der nested loop join hat die äußere Tabelle mit den vorraussichtlich 50 Tupeln. Die Kosten für den nested loop ergeben sich aus der Anzahl der Tupel der äußeren Tabelle multipliziert mit den Kosten der inneren Tabelle (50 * 0.27 = 13,5) plus ein wenig CPU-Zeit für die Join-Verarbeitung. Werden von den Gesamtkosten für das nested loop die Gesamtkosten vom Hash-Join abgezogen, so ergeben sich Kosten von 495.98 - 481.63 = 14.35. Die CPU-Zeit für die Join-Verarbeitung sind 14,35 - 13,5 = 0,85.
+
+Jetzt werden zusätzlich noch Indexe für die Fremdschlüssel angelegt:
 \begin{lstlisting}[caption=Indexe für alle Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluesselUndIndex]{code:PrimaerUndFremdschluesselUndIndex}
 CREATE INDEX event_creatorid ON public.event(creatorid);
 CREATE INDEX message_eventid ON public.message(eventid);
@@ -73,7 +89,9 @@ CREATE INDEX participation_eventid ON public.participation(eventid);
 "        Index Cond: (userid = p.userid)"
 \end{lstlisting}
 
-Indexe auf Nicht-Id-Spalten
+An diesem Ausführungsplan wird deutlich, dass jetzt für alle gefundenen Events mit dem Namen event1 ihr Attribut e.eventid als Schlüssel für den Index Scan auf Participation verwendet werden kann. Denn die Tabelle Participation besitzt jetzt einen Index auf den Fremdschlüssel eventid. Die Tabelle event wird dagegen sequentiell gescannt, da hier die komplette Tabelle nach dem Event mit dem Namen event1 durchsucht werden muss.
+
+An dieser Stellt sollen noch Indexe auf Nicht-Id-Spalten vergeben werden:
 \begin{lstlisting}[caption=Indexe für alle Fremdschlüssel setzen, firstnumber=1, label=PrimaerUndFremdschluesselUndIndexNichtId]{code:PrimaerUndFremdschluesselUndIndexNichtId}
 CREATE INDEX event_date ON public.event(date);
 CREATE INDEX event_eventname ON public.event(eventname);
@@ -102,6 +120,8 @@ CREATE INDEX user_birthday ON public.user(birthday);
 "        Index Cond: (userid = p.userid)"
 \end{lstlisting}
 -------------------------------------------------------------
+
+Der nun erzeugte Ausführungsplan senkt die Gesamtkosten von vorher 287.57 auf jetzt 16.84. Erreicht wurde diese Geschwindigkeitssteigerung durch den Index auf die Spalte eventname.
 
 Query 2: Alle weiblichen user anzeigen, die zwischen 1986 und 1992 geboren worden und an einem event teilnehmen, dass  zwischen dem 01.01.2013 und dem 01.03.2013 stattfindet, und bei dem numberMaleConfirmed / numberFemaleConfirmed kleiner 0,5 ist.
 
@@ -146,6 +166,9 @@ mit Primär- und Fremdschlüsseln für alle Tabellen:
 "        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
 \end{lstlisting}
 
+An diesem Ausführungsplan ist erkennbar, dass der Planer die Entscheidung, welche Tabelle treibend und welche innen sein soll, korrekt entscheidet. Das nested loop so wie es hier geplant ist, verursacht vorraussichtlich Kosten von 370 Zeilen * 0,38 = 129,5. Hätte der Planer treibende und innere Tabelle vertauscht, wären Kosten in Höhe von 1 * 235,16 = 235,16 entstanden.
+Kann der Planer auf einen Index Scan zugreifen der eine hohe Selektivität hat, dann entscheidet er sich für einen nested loop join. Greift er mit einem Sequential Scan die Daten ab, dann hasht er sie.
+
 sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
 
 \begin{lstlisting}[caption=Ausführungsplan Query 2 mit Indexen, firstnumber=1, label=aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId]{code:aQuery2PrimaerUndFremdschluesselUndIndexFremdschluesselNichtId}
@@ -163,6 +186,8 @@ sowie Indexen auf Fremdschlüssel- und Nicht-Id-Spalten:
 "        Index Cond: (eventid = p.eventid)"
 "        Filter: ((date >= '2013-01-01'::date) AND (date <= '2013-03-01'::date) AND (((numbermaleconfirmed / numberfemaleconfirmed))::numeric < 0.5))"
 \end{lstlisting}
+
+In diesem Ausführungsplan kommt erstmals ein Bitmap Index Scan zum Einsatz. Das ist möglich, da auf user.birthday indiziert wurde. Da alle Nutzer gesucht werden, deren Geburtstag im Bereich 1986-01-01 und 1992-12-31 liegen, bietet sich ein Bitmap Index Scan an.
 
 -------------------------------------------------------------
 
