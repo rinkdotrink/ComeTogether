@@ -13,7 +13,7 @@ Von PostgreSQL werden derzeit vier Indextypen unterstützt:
 \begin{itemize}
 
 \item \textbf{B-tree}: \\
-Es ist die Implementierung des B+-Baums und der Standardindextyp. Er kann alle Anfragen mit den Vergleichsoperatoren( <, <=, =, >=, >) und den Konstrukten wie BETWEEN und IN bearbeiten.
+Es ist die Implementierung des B+-Baums und der Standardindextyp. Er kann alle Anfragen mit den Vergleichsoperatoren( $<$, $<=$, $=$, $>=$, $>$) und den Konstrukten wie BETWEEN und IN bearbeiten.
 
 \item \textbf{Hash}: \\ 
 Dieser Indextyp verwendet eine Hashtabelle und bedient nur Anfragen mit dem Gleichheitsoperator(=). Er bietet keine bessere Geschwindigkeit als B-tree und wird heutzutage hauptsächlich nur bei Experimenten verwendet. 

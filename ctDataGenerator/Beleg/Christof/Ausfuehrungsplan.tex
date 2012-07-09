@@ -7,30 +7,30 @@ z.B. \textbf{SET enable\_seqscan TO off} \\
 
 In der Voreinstellung sind alle Plantypen an und können vom Planer benutzt werden. Die folgende Auflistung zeigt die verschiedenen Plantypen und ihre Bedeutung: \\
 \begin{itemize}
-\item enable\_seqscan: \\
+\item \textbf{enable\_seqscan}: \\
 Wenn der Planer zu sequenziellen Plänen tendiert, kann man mit diesem Parameter die Verwendung von indexbasierten Plänen erzwingen. Die sequenziellen Pläne werden zwar nicht ganz abgeschaltet, aber sie werden extrem hoch bewertet und erscheinen zu aufwendig für den Planer um sie zu nutzen. Auf die selbe Art und Weise können die folgenden Parameter den Planer beeinflussen: 
 
-\item enable\_indexscan: \\
+\item \textbf{enable\_indexscan}: \\
 Hiermit werden die indexbasierten Pläne aktiviert bzw. deaktiviert.
 
-\item enable\_bitmapscan: \\
+\item \textbf{enable\_bitmapscan}: \\
 Auch das Aktivieren und Deaktivieren von Bitmap Index Scans ist möglich.
 
-\item enable\_nestloop:\\
+\item \textbf{enable\_nestloop}:\\
 Aktivierung bzw. Deaktivierung von Nested-Loop-Joins. 
 
-\item enable\_hashjoin: \\
+\item \textbf{enable\_hashjoin}: \\
 Aktivierung bzw. Deaktivierung von Hash-Join-Plantypen.
 
-\item enable\_mergejoin: \\
+\item \textbf{enable\_mergejoin}: \\
 Aktivierung bzw. Deaktivierung von Merge-Join-Plantypen.
 
-\item enable\_hashagg: \\
+\item \textbf{enable\_hashagg}: \\
 Aktivierung bzw. Deaktivierung von Hash-basierter Aggregierung.
 
-\item enable\_sort: \\
+\item \textbf{enable\_sort}: \\
 Sortieroperationen werden vom Planer nicht berücksichtigt wenn dieser Parameter deaktiviert ist. Es kann aber vorkommen, dass sie trotzdem im Anfrageplan vorkommen wenn keine Alternativen herangezogen werden können.
 
-\item enable\_tidscan: \\
+\item \textbf{enable\_tidscan}: \\
 Aktivierung bzw. Deaktivierung von TID-basierten Plantypen.
 \end{itemize}
