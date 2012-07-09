@@ -7,25 +7,25 @@ In der Regel sind keine weitreichenden Änderungen an diesen Parametern notwendig
 
 \begin{itemize}
 
-\item seq\_page\_cost: \\
+\item \textbf{seq\_page\_cost}: \\
 Wird eine Page von der Platte gelesen, entsteht Aufwand, der mit diesem Parameter definiert ist. Er gibt die Kosten für das sequenziellen Lesen einer Page(typischerweise 8kb) während einer laufenden Leseanweisung an, die Voreinstellung für diesen Parameter ist 1.0.
 
-\item random\_page\_cost: \\
+\item \textbf{random\_page\_cost}: \\
 Der Parameter gibt an, um wie viel aufwändiger es ist, Pages in zufälliger Reihenfolge zu lesen, wie es bei Indexscans vorkommt (gemessen am sequentiellem Lesen von Pages). Die Voreinstellung  ist 4.
 Die Parameter seq\_page\_cost und random\_page\_cost kann man sich vereinfacht als Kosten für sequenzielle Scans und Indexscans vorstellen. Indexscans sind langsamer als das sequenzielle Lesen, dafür aber muss man in der Regel bei den Indexscans nicht so viele Seiten lesen. Mit diesen Parametern entscheidet der Planer zwischen Index und nicht Index.
 Die Voreinstellung besagt, dass ein Indexscan viermal langsamer ist als der sequenzielle Scan. Dieser Wert kann jedoch bei schnellen Festplatten zu hoch sein und es wird empfohlen den Wert pauschal auf 2.0 oder 3.0 herunterzusetzen.
 Wenn sich die Datenbank komplett im Hauptspeicher befindet, ist es sinnvoll die beiden Parameter gleichzusetzen, da der Aufwand in diesem Fall gleich ist.
 
-\item cpu\_tuple\_cost: \\
+\item \textbf{cpu\_tuple\_cost}: \\
 Hiermit werden die Kosten für das Verarbeiten einer Tabellenzeile durch die CPU definiert. Die Voreinstellung ist 0.01 und dieser Wert wird in der Regel sehr selten verändert.
 
-\item cpu\_index\_tuple\_cost: \\ 
+\item \textbf{cpu\_index\_tuple\_cost}: \\ 
 Dieser Parameter definiert die Kosten für das Verarbeiten eines Indexeintrags durch die CPU während eines Indexscans. Auch dieser Parameter wird sehr selten verändert und ist auf 0.005 voreingestellt.
 
-\item cpu\_operator\_cost: \\
+\item \textbf{cpu\_operator\_cost}: \\
 Dieser Konfigurationsparameter gibt die Kosten für das Ausführen eines Operators oder einer Funktion an. Die Voreinstellung ist 0.0025 und wird in der Regel sehr selten verändert.
 
-\item effective\_cache\_size: \\ 
-Dieser Parameter gibt an, wie viel Cache-Speicher für eine Anfrage vom Betriebssystem bereitgestellt werden. Es ist nur eine Vermutung und es wird kein Speicher angelegt. Der Planer sieht anhand dieses Parameters ob ein Index im Hauptspeicher höchstwahrscheinlich gecached ist, oder noch von der Festplatte gelesen werden muss. Daraufhin entscheidet der Planer ob ein indexbasierter Zugriffspfad zu wählen ist oder ob nicht eine andere Alternative kostengünstiger ist. Es hoher Wert sorgt also dafür, dass mehr Indexscans verwendet werden. Die Voreinstellung beträgt 128 MByte.
+\item \textbf{effective\_cache\_size}: \\ 
+Dieser Parameter gibt an, wie viel Cache-Speicher für eine Anfrage vom Betriebssystem bereitgestellt werden. Es ist nur eine Vermutung und es wird kein Speicher angelegt. Der Planer sieht anhand dieses Parameters ob ein Index im Hauptspeicher höchstwahrscheinlich gecached ist, oder noch von der Festplatte gelesen werden muss. Daraufhin entscheidet der Planer ob ein indexbasierter Zugriffspfad zu wählen ist oder ob nicht eine andere Alternative kostengünstiger ist. Ein hoher Wert sorgt also dafür, dass mehr Indexscans verwendet werden. Die Voreinstellung beträgt 128 MByte.
 
 \end{itemize}

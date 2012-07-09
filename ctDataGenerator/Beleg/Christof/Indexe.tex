@@ -12,16 +12,16 @@ Von PostgreSQL werden derzeit vier Indextypen unterstützt:
 
 \begin{itemize}
 
-\item B-tree: \\
+\item \textbf{B-tree}: \\
 Es ist die Implementierung des B+-Baums und der Standardindextyp. Er kann alle Anfragen mit den Vergleichsoperatoren( <, <=, =, >=, >) und den Konstrukten wie BETWEEN und IN bearbeiten.
 
-\item Hash: \\ 
+\item \textbf{Hash}: \\ 
 Dieser Indextyp verwendet eine Hashtabelle und bedient nur Anfragen mit dem Gleichheitsoperator(=). Er bietet keine bessere Geschwindigkeit als B-tree und wird heutzutage hauptsächlich nur bei Experimenten verwendet. 
 
-\item GiST: \\
+\item \textbf{GiST}: \\
 Bei GiST handelt es sich um eine universelle Schnittstelle, um verschiedene anwendungsspezifische Indextypen selbst definieren zu können. Zwei Anwendungen davon sind PostGIS und OpenFTS(Open Source Full Textj Search). Man verwendet diesen Indextyp um beispielsweise Geodaten zu sortieren oder bei der Volltextsuche.
 
-\item GIN: \\
+\item \textbf{GIN}: \\
 Hierbei handelt es sich um einen invertierten Index, der Werte mit mehreren Schlüsseln wie beispielsweise Arrays und Listen indizieren kann.
 
 \end{itemize}
@@ -30,6 +30,7 @@ Hierbei handelt es sich um einen invertierten Index, der Werte mit mehreren Schl
 
 Der reine Indexscan eignet sich am besten dort, wo die Selektivität sehr hoch ist und der reine Sequential Scan sollte bei niedriger Selektivität verwendet werde, also dann wenn die Tabelle komplett oder fast komplett gelesen werden soll. Der Bitmap Index Scan dagegen soll das gesamte Spektrum zwischen Index- und Sequential Scan abdecken, also die Vorteile von beiden Indextypen kombinieren. 
 
+z.B.
 \begin{verbatim}
 EXPLAIN Select *
 from public.user u

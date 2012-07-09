@@ -1,17 +1,18 @@
 \section{Statistiken}
 
 Der Planer sammelt Statistiken um die Anzahl der zu erwartenden Ergebniszeilen zu ermitteln. Relevant dabei ist die Anzahl der Zeilen in der Tabelle, sowie die Anzahl der von der Tabelle belegten Blöcke. Diese Daten stehen in der Systemtabelle pg\_class und der Planer kann mit Hilfe dieser Informationen die Anzahl der Zeilen für einen sequenziellen Scan über eine Tabelle, sowie den Speicher- und I/O-Aufwand ermitteln. Aktuell gehalten werden die Statistiken von den Befehlen \textbf{VACUUM} und \textbf{ANALYZE}, sowie von \textbf{CREATE INDEX}.
-Meistens jedoch werden die Tabellen nicht komplett gelesen, sondern müssen nach bestimmten Kriterien z.B. mit der WHERE-Klausel ausgewählt werden. Dazu muss der Planer weitere Statistiken sammeln, die in der Tabelle pg\_statistics stehen und mit der folgenden Anfrage eingesehen werden können: \\
-
-SELECT * FROM pg\_stats WHERE tablename = 'user' AND attname = 'birthday'
-\\
+Meistens jedoch werden die Tabellen nicht komplett gelesen, sondern müssen nach bestimmten Kriterien z.B. mit der WHERE-Klausel ausgewählt werden. Dazu muss der Planer weitere Statistiken sammeln, die in der Tabelle pg\_statistics stehen und mit der folgenden Anfrage eingesehen werden können: 
+\begin{verbatim}
+SELECT * FROM pg\_stats WHERE tablename = 'user' 
+					AND attname = 'birthday'
+\end{verbatim}
 
 Das Ergebnis dieser Anfragen sind Näherungswerte und beziehen sich immer nur auf eine Spalte. Die interessantesten sind: 
 
 \begin{itemize}
 
-\item  n\_distinct = 80: Die Zahl bedeutet, dass die Tabelle 80 unterschiedliche Werte enthält. 
-\item  most\_common\_vals = 1951-02-01, 1947-02-01, usw.: Ein Array mit den häufigsten Werten in der Tabelle.
-\item correlation = 0.016471: Eine Korrelation zwischen der logischen Reihenfolge der Werte und der Reihenfolge auf der Festplatte. Ein Wert der nah bei -1 oder +1 liegt bedeutet, dass Indexscans günstiger sind, weil die Festplattenzugriffe nicht so weit auseinander liegen.
+\item  \textbf{n\_distinct} = 80: Die Zahl bedeutet, dass die Tabelle 80 unterschiedliche Werte enthält. 
+\item  \textbf{most\_common\_vals} = 1951-02-01, 1947-02-01, usw.: Ein Array mit den häufigsten Werten in der Tabelle.
+\item \textbf{correlation} = 0.016471: Eine Korrelation zwischen der logischen Reihenfolge der Werte und der Reihenfolge auf der Festplatte. Ein Wert der nah bei -1 oder +1 liegt bedeutet, dass Indexscans günstiger sind, weil die Festplattenzugriffe nicht so weit auseinander liegen.
 
 \end{itemize}

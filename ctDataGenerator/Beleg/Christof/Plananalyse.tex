@@ -1,8 +1,8 @@
 \section{Plananalyse}
 
-Mit dem Befehl EXPLAIN gefolgt von der eigentlichen Anfrage können die Ausführungpläne angesehen werden:
+Mit dem Befehl \textbf{EXPLAIN} gefolgt von der eigentlichen Anfrage können die Ausführungpläne angesehen werden:
 
-Beispiel1 ohne Indexe:
+z.B. Anfrage ohne Indexe:
 \begin{verbatim}
 EXPLAIN Select u.userId, u.name, u.email, u.gender, u.birthday
 from public.user u, public.event e, public.participation p
@@ -37,7 +37,7 @@ AND p.userid = u.userid;
 \item Die letzte Zahl gibt die Größe der Ergebniszeile in Bytes an(width). Man kann mit Hilfe der Zeilenzahl(rows) den Speicherbedarf der Ergebnismenge vorhersehen(rows * width).
 \end{itemize}
 
-Die geschätzten Kosten für einen sequenziellen Scan der Tabelle "`user"', die in unserem Beispiel1 auf 22.00 geschätzt werden,  lassen sich mit Hilfe folgender Anfrage in PostgreSQL leicht berechnen: \\ 
+Die geschätzten Kosten für einen sequenziellen Scan der Tabelle "`user"', die in unserem Beispiel auf 22.00 geschätzt werden,  lassen sich mit Hilfe folgender Anfrage in PostgreSQL leicht berechnen: \\ 
 
 SELECT relpages, reltuples FROM pg\_class WHERE relname = 'user'
 \\
