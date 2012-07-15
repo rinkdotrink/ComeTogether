@@ -5,11 +5,11 @@ import de.ct.shared.User;
 
 public interface UserServerREST {
 
-	public User User1(String aUser);
+	public User createUser(String aUserStr);
 	
-	public User User2(String aUserId);
+	public User readUser(String aUserId);
 	
-	public User User3(String aUserStr);
+	public User loginUser(String aUserStr);
 	
 	public String deleteUser(String aUserId);
 

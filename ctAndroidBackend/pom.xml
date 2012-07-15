@@ -15,8 +15,6 @@
 		</repository>
 	</repositories>
 
-
-
 	<dependencies>
 		<dependency>
 			<groupId>de.ct.shared</groupId>
