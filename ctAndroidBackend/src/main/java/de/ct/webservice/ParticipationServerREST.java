@@ -6,12 +6,12 @@ import de.ct.shared.Participation;
 
 public interface ParticipationServerREST {
 
-	public Participation Participation(String aParticipation);
+	public Participation createParticipation(String aParticipation);
 
 	public String deleteParticipation(String aParticipationId);
 
-	public List<Participation> ParticipationsForEventId(final String aEventId);
+	public List<Participation> readParticipationsForEventId(final String aEventId);
 
-	public List<Participation> ParticipationsForUserId(final String aUserId);
+	public List<Participation> readParticipationsForUserId(final String aUserId);
 
 }

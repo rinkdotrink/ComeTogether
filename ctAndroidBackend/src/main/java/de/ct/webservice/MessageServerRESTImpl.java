@@ -27,7 +27,7 @@ public class MessageServerRESTImpl  implements MessageServerREST {
 	@Path("/createMessage")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Message Message1(String aMessageStr) {
+	public Message createMessage(String aMessageStr) {
 		Marshaller marshaller = new Marshaller();
 		Message aMessage = (Message) marshaller.unmarshall(aMessageStr, new Message());
 		Message message = messageService.createNewMessage();
@@ -43,7 +43,7 @@ public class MessageServerRESTImpl  implements MessageServerREST {
 	@Path("/readMessage")
 	@Consumes("text/plain")
 	@Produces("application/json")	
-	public Message Message2(String aMessageId) {
+	public Message readMessage(String aMessageId) {
 		long messageId = Long.parseLong(aMessageId);
 		Message message = messageService.findMessageById(messageId);
 		return message;

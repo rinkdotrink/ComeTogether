@@ -5,9 +5,9 @@ import de.ct.shared.Message;
 
 public interface MessageServerREST {
 
-	public Message Message1(String aMessage);
+	public Message createMessage(String aMessage);
 	
-	public Message Message2(String aMessageId);
+	public Message readMessage(String aMessageId);
 	
 	public String deleteMessage(String aMessageId);
 	

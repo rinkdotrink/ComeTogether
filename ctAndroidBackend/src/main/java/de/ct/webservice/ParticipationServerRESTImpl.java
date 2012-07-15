@@ -29,7 +29,7 @@ public class ParticipationServerRESTImpl  implements ParticipationServerREST {
 	@Path("/createParticipation")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Participation Participation(String aParticipationStr) {
+	public Participation createParticipation(String aParticipationStr) {
 		Marshaller marshaller = new Marshaller();
 		Participation aParticipation = (Participation) marshaller.unmarshall(aParticipationStr, new Participation());
 		Participation participation = participationService.createNewParticipation();
@@ -43,7 +43,7 @@ public class ParticipationServerRESTImpl  implements ParticipationServerREST {
 	@Path("/readParticipationsForEventId")
 	@Consumes("text/plain")
 	@Produces("application/json")	
-	public List<Participation> ParticipationsForEventId(final String aEventId) {
+	public List<Participation> readParticipationsForEventId(final String aEventId) {
 		Long eventId = Long.valueOf(aEventId);
 		List<Participation> participations = participationService.getParticipationsForEventId(eventId);
 		return participations;
@@ -53,7 +53,7 @@ public class ParticipationServerRESTImpl  implements ParticipationServerREST {
 	@Path("/readParticipationsForUserId")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public List<Participation> ParticipationsForUserId(final String aUserId) {
+	public List<Participation> readParticipationsForUserId(final String aUserId) {
 		Long userId = Long.valueOf(aUserId);
 		List<Participation> participations = participationService.getParticipationsForUserId(userId);
 		return participations;
