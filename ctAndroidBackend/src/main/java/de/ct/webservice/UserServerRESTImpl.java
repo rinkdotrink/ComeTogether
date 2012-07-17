@@ -28,7 +28,7 @@ public class UserServerRESTImpl implements UserServerREST {
 	@Path("/createUser")
 	@Consumes("text/plain")	
 	@Produces("application/json")
-	public User User1(String aUserStr) {
+	public User createUser(String aUserStr) {
 		Marshaller marshaller = new Marshaller();
 		User aUser = (User) marshaller.unmarshall(aUserStr, new User());		
 		User user = userService.createNewUser();
@@ -47,7 +47,7 @@ public class UserServerRESTImpl implements UserServerREST {
 	@Path("/readUser")
 	@Consumes("text/plain")
 	@Produces("application/json")	
-	public User User2(String aUserId) {
+	public User readUser(String aUserId) {
 		long userId = Long.parseLong(aUserId);
 		User user = userService.findUserById(userId);		
 		return user;
@@ -58,7 +58,7 @@ public class UserServerRESTImpl implements UserServerREST {
 	@Path("/login")
 	@Consumes("text/plain")
 	@Produces("application/json")	
-	public User User3(String aUserStr) {
+	public User loginUser(String aUserStr) {
 		Marshaller marshaller = new Marshaller();
 		User user = (User) marshaller.unmarshall(aUserStr, new User());
 		User user2 = userService.findUserByName(user.getName());

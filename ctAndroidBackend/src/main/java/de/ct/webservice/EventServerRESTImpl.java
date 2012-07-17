@@ -31,7 +31,7 @@ public class EventServerRESTImpl  implements EventServerREST {
 	@Path("/createEvent")
 	@Consumes("text/plain")
 	@Produces("application/json")
-	public Event Event1(String aEventStr) {
+	public Event createEvent(String aEventStr) {
 		Marshaller marshaller = new Marshaller();
 		Event aEvent = (Event) marshaller.unmarshall(aEventStr, new Event());		
 		Event event = eventService.createNewEvent();
@@ -53,7 +53,7 @@ public class EventServerRESTImpl  implements EventServerREST {
 	@Path("/readEvent")
 	@Consumes("text/plain")
 	@Produces("application/json")	
-	public Event Event2(String aEventId) {
+	public Event readEvent(String aEventId) {
 		long eventId = Long.parseLong(aEventId);
 		Event event = eventService.findEventById(eventId);
 		return event;
