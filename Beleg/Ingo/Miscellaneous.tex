@@ -1,0 +1,11 @@
+\section{Miscellaneous}\label{Miscellaneous}
+To test the backend classes EasyMock 3.0 is used. EasyMock is a test framework for the dynamic generation of mock objects for interfaces and classes. Mock objects are used to unit testing java classes.
+
+The backend uses the architecture pattern dependency injection to minimize dependencies between objects. 
+With dependency injection, the object does not creates its dependent objects anymore.
+These dependencies are created by a framework. The code of the object become independent of its environment. In this way the object is easy to test because dependencies are available centralized.
+The backend uses the dependency injection framework called google guice.
+
+For marshalling objects and unmarshalling JSON strings Jackson is used. Jackson is a multi-purpose Java library for processing JSON.
+
+The communication between client and backend is done by apache http. The client uses post-requests.
