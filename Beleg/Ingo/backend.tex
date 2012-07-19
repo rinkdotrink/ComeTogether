@@ -1,0 +1,27 @@
+\section{backend}\label{sec:backend}
+User, events, messages and participations are stored on the server side, cause they are to many to store them all locally and keep them up to date. That is to say ComeTogether needs an internet connection to get access to all the data.
+A convenient way to save data remotely is provided by Platform as a Service (PaaS).
+With PaaS no own infrastructure is needed, because extern infrastructure is used.
+With PaaS the developer does not need to worry about patches, backups and scalability.
+Load peaks are intercepted and rapidly growing data is absorbed.
+PaaS is based on Infrastructure as a Service (IaaA). Computing power for running applications and memory for storing data is provided thru IaaA.
+For instance amazon provides computer power with EC2 and memory with S3. Often with PaaS the developer has also access to a data base.
+Further more PaaS provides a own runtime environment as a service for which the developer paid on demand.
+Examples for PaaS are Google App Engine, Windows Azure or Amazon Elastic Beanstalk.
+GAE is usefull because google and android are closely interlinked. 
+Amazon elastic beanstalk and microsoft windows azure are not discussed due to time and so only GAE is considered.
+GAE provides a JavaVM for business logic, where the backend of ComeTogether will be running.
+With the "datastore" a transaction save no-sql data base management system based on Googles "Big Table" concept is provided for storing data of ComeTogether. For Java also parts of JPA are supported.
+There are plugins like google plugin for eclipse which support developers when creating android apps with GAE.
+Normal communication with GAE is done via REST-Services.
+In GAE a servlet is running which gets http requests, does a db access and return the data via http response.
+Over "cloud to device messaging" a device will be notified if there is e.g. a new event.
+Unfortunately, the team have a lack of experience to deal with all the error messages which have occurred already in the sample project on the manufacturing side
+https://developers.google.com/eclipse/docs/creat\-ing\_new\_webapp.
+One error messages was
+"C:/Users/In\-go/android-sdks/tools/lib/proguard.cfg (Das System kann die angegebene Datei nicht finden)".
+The problem was described on several web pages and could be solved.
+An other error message was "Setup could not finish - Unable to open connection to server."
+It was solved by integrating the Google API in AVD for C2DM instead of the android SDK.
+There was an other error message while running the sample project, which could not be solved due to time: "Could not find method com.google.web.bindery.request\-factory.vm.Request\-FactorySource.create, referenced from method de.ct.Util.get\-Request\-Factory"
+So there was only the conventional way to host the app on a dedicated server.

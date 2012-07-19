@@ -1,6 +1,8 @@
 \section{database}\label{database}
 In figure \ref{fig:EERdiagram} you can see the data base design of ComeTogether.
 
+The data is written into the data base tables through prepared statements. Prepared statements contain placeholders for the actual data to be written. Prepared statements are a fast choice if the statements differ only in the parameter values.
+
 \begin{figure}[htp]
 \centering
 \includegraphics[width=0.5\textwidth]{Ingo/pictures/EER-diagram.png}
