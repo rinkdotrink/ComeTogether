@@ -1,0 +1,69 @@
+\documentclass[a4paper,12pt,oneside,bibtotoc,numbers=noenddot]{scrreprt}
+
+%Pakete
+\usepackage[latin9]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{BachelorThesis}
+
+% Allgemeine Informationen
+\newcommand\mytitle{Titel der Arbeit}
+\newcommand\myauthor{Name des Autors oder der Autoren}
+\newcommand\mydepartment{Informatik und Elektrotechnik}
+\newcommand\myinstitute{Hochschule Zittau/G\"{o}rlitz}
+\newcommand\mytutor{Name und Titel des betreuenden Professors}
+\newcommand\mySecondTutor{Name und Titel des betrieblichen Betreuers}
+
+% Abstracts
+\newcommand\mysubject{Das deutsche Abstract.}
+\newcommand\mysubjectenglish{The english abstract.}
+
+% PDF-Einstellungen
+\hypersetup
+{
+	pdftitle = \mytitle,
+	pdfsubject = \mysubject,
+	pdfauthor = \myauthor,
+	pdfkeywords = {},
+	colorlinks = {true},
+	pdfborder = 0 0 0
+}
+
+\begin{document}
+\nocite{*}
+
+%
+\pagenumbering{alph}
+
+%
+%% Kurzreferat
+\thispagestyle{empty}
+
+%\mysubject
+%\section*{Abstract}
+%\mysubjectenglish
+
+\pagenumbering{Roman}
+
+
+\newpage
+\pagestyle{chapterStyle}
+\pagenumbering{arabic}
+
+\input{Arbeitsaufteilung}
+
+\newpage
+\chapter{STATEMENT OF AUTHORSHIP}
+
+We have written this thesis independently. I know that any form of plagiarism will rated with a score of 5 (scam).
+
+\begin{tabular}{@{}p{6.0cm}p{6.0cm}}	  		  		 	
+	  		 & \\
+	  		 & \\
+				  			\textbf{Ochmann, Christof} &               signature:\\				 
+				 &\\
+				 & \\
+				  			\textbf{Körner, Ingo}   	&                     signature:\\			
+\end{tabular}
+\end{document}
