@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>30</x>
+      <y>420</y>
+      <w>320</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>MessageDAO
+--
++create() : Message
++read(aMessageId : long) : Message
++update(aMessage : Message) : Message
++delete(aMessage : Message) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>100</x>
+      <y>150</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>MessageServiceRESTImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>160</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>110</x>
+      <y>360</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>MessageServiceImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>200</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>370</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>110</x>
+      <y>570</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>MessageDAOImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>410</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>570</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>10</x>
+      <y>210</y>
+      <w>360</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>MessageService
+--
++createNewMessage() : Message
++deleteMessage(aMessageId : long) : void
++findMessageById(aMessageId : long) : Message
++saveMessage(aMessage : Message) : Message</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>30</x>
+      <y>10</y>
+      <w>320</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>MessageServerREST
+--
++createMessage(aMessage : String) : Message
++readMessage(aMessageId : String) : Message
++deleteMessage(aMessageId : String) : String
+	</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>50</x>
+      <y>620</y>
+      <w>280</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>MessagePersistence
+--
++read(aMessageId : long) : Message
++update(aMessage : Message) : void
++delete(aMessage : Message) : void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>100</x>
+      <y>750</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>MessagePersistanceImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>610</y>
+      <w>50</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>0</y>
+      <w>50</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;150</additional_attributes>
+  </element>
+</diagram>

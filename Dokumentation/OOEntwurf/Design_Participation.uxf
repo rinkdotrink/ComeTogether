@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>10</x>
+      <y>420</y>
+      <w>460</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>ParticipationDAO
+--
++create() : Participation
++getParticipationsForEventId(aEventId : long) : List&lt;Participation&gt;
++getParticipationsForUserId(aUserId : long) : List&lt;Participation&gt;
++update(aParticipation : Participation) : Participation
++delete(aParticipation : Participation) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>140</x>
+      <y>150</y>
+      <w>200</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ParticipationServiceRESTImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>160</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>160</x>
+      <y>360</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ParticipationServiceImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>200</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>370</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>160</x>
+      <y>570</y>
+      <w>160</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>ParticipationDAOImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>410</y>
+      <w>50</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;160</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>570</y>
+      <w>50</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>30;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>10</x>
+      <y>210</y>
+      <w>460</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>ParticipationService
+--
++createNewParticipation() : Participation
++deleteParticipation(aParticipationId : long) : void
++getParticipationsForEventId(aEventId : long) : List&lt;Participation&gt;
++getParticipationsForUserId(aUserId : long) : List&lt;Participation&gt;
++saveParticipation(aParticipation : Participation) : Participation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>0</y>
+      <w>50</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;150</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>0</x>
+      <y>10</y>
+      <w>480</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>ParticipationServerREST
+--
++createParticipation(aParticipation : String) : Participation
++deleteParticipation(aParticipationId : String) : String
++readParticipationsForEventId(aEventId : String) : List&lt;Participation&gt;
++readParticipationsForUserId(aUserId : String) : List&lt;Participation&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>150</x>
+      <y>750</y>
+      <w>190</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>ParticipationPersistanceImpl</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>10</x>
+      <y>620</y>
+      <w>460</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>ParticipationPersistence
+--
++getParticipationsForEventId(aEventId : long) : List&lt;Participation&gt;
++getParticipationsForUserId(aUserId : long) : List&lt;Participation&gt;
++update(aParticipation : Participation) : void
++delete(aParticipation : Participation) : void
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>610</y>
+      <w>50</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;140</additional_attributes>
+  </element>
+</diagram>
